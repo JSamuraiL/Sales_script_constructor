@@ -5,13 +5,13 @@ CREATE TABLE roles
 );
 
 CREATE TABLE managers (
-    id UUID PRIMARY KEY,
+    	id UUID PRIMARY KEY,
 	mail VARCHAR(255) NOT NULL,
 	hashed_password VARCHAR(255) NOT NULL,
-    name VARCHAR(35) NOT NULL,
+    	name VARCHAR(35) NOT NULL,
 	surname VARCHAR(35) NOT NULL,
 	patronymic VARCHAR(35) NOT NULL,
-    role_id SERIAL REFERENCES roles(id) NOT NULL
+    	role_id SERIAL REFERENCES roles(id) NOT NULL
 );
 
 CREATE TABLE sellers 
