@@ -1,0 +1,6 @@
+@SalesScriptConstructor_HostAddress = http://localhost:5138
+
+GET {{SalesScriptConstructor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
