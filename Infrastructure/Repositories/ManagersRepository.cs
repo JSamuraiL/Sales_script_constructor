@@ -4,10 +4,10 @@ using SalesScriptConstructor.Domain.Interfaces.IManagers;
 
 namespace SalesScriptConstructor.Infrastructure.Repositories
 {
-    public class ManagerRepository : IManagersRepository
+    public class ManagersRepository : IManagersRepository
     {
         private readonly PostgreDbContext _dbContext;
-        public ManagerRepository(PostgreDbContext dbContext) 
+        public ManagersRepository(PostgreDbContext dbContext) 
         { 
             _dbContext = dbContext;
         }
