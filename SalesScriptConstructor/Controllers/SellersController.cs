@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
 namespace SalesScriptConstructor.API.Controllers
@@ -8,6 +9,16 @@ namespace SalesScriptConstructor.API.Controllers
     [ApiController]
     public class SellersController : ControllerBase
     {
-        private readonly ISellersService sellersService;
+        private readonly ISellersService _sellersService;
+        public SellersController (ISellersService sellersService)
+        {
+            _sellersService = sellersService;
+        }
+
+        [HttpGet("{ManagerId}")]
+        public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid id) 
+        {
+            return await _sellersService.GetSellersByManagerId(id);
+        }
     }
 }

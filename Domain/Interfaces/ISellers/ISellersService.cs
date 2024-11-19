@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SalesScriptConstructor.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace SalesScriptConstructor.Domain.Interfaces.ISellers
 {
     public interface ISellersService
     {
+        Task<IEnumerable<Seller>> GetSellersByManagerId(Guid id);
     }
 }

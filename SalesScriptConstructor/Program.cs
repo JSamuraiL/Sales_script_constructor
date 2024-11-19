@@ -18,8 +18,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IManagersService, ManagersService>();
 builder.Services.AddTransient<IManagersRepository, ManagersRepository>();
-//builder.Services.AddTransient<ISellersService, SellersService>();
-//builder.Services.AddTransient<ISellersRepository, SellersRepository>();
+builder.Services.AddTransient<ISellersService, SellersService>();
+builder.Services.AddTransient<ISellersRepository, SellersRepository>();
 builder.Services.AddDbContext<PostgreDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
