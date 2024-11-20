@@ -14,7 +14,7 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
 
         public async Task AddManagerAsync(Manager manager)
         {
-            _dbContext.Managers.Add(manager);
+            await _dbContext.Managers.AddAsync(manager);
             await _dbContext.SaveChangesAsync();
         }
 

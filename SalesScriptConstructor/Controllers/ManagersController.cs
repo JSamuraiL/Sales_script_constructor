@@ -20,14 +20,14 @@ namespace SalesScriptConstructor.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Manager>> GetManager(Guid id)
         {
-            var manager = await _managersService.GetManagerByIdAsync(id);
-
-            if (manager == null)
+            try
+            {
+                return await _managersService.GetManagerByIdAsync(id);
+            }
+            catch (ArgumentNullException) 
             {
                 return NotFound("Менеджера с таким Id не существует");
             }
-
-            return manager;
         }
         
         // PUT: api/Managers/5

@@ -10,5 +10,8 @@ namespace SalesScriptConstructor.Domain.Interfaces.ISellers
     public interface ISellersRepository
     {
         Task <IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId);
+        Task<Seller> GetSellerByIdAsync(Guid id);
+        Task AddSellerAsync(Seller seller);
+        bool SellerExists(Guid id);
     }
 }

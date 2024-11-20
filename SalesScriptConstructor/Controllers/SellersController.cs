@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
@@ -15,10 +16,44 @@ namespace SalesScriptConstructor.API.Controllers
             _sellersService = sellersService;
         }
 
-        [HttpGet("{ManagerId}")]
+        [HttpGet("manager/{ManagerId}")]
         public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid ManagerId) 
         {
             return await _sellersService.GetSellersByManagerId(ManagerId);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Seller>> GetSeller(Guid id)
+        {
+            try 
+            { 
+                return await _sellersService.GetSellerByIdAsync(id); 
+            }
+            catch (ArgumentNullException) 
+            {
+                return NotFound("Продавца с таким Id не существует");
+            }
+        }
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult<Seller>> CreateSeller(Seller seller) 
+        {
+            try
+            {
+                await _sellersService.AddSellerAsync(seller);
+            }
+            catch (DbUpdateException) 
+            {
+                if (_sellersService.SellerExists(seller.Id)) 
+                {
+                    return Conflict("Продавец с таким Id уже существует");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return CreatedAtAction("GetSeller", new { id = seller.Id }, seller);
         }
     }
 }

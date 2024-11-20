@@ -16,9 +16,25 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public async Task AddSellerAsync(Seller seller)
+        {
+            await _dbContext.Sellers.AddAsync(seller);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Seller> GetSellerByIdAsync(Guid id)
+        {
+            return await _dbContext.Sellers.FindAsync(id);
+        }
+
         public async Task<IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId)
         {
             return await _dbContext.Sellers.Where(Seller => Seller.ManagerId == ManagerId).ToListAsync();
+        }
+        public bool SellerExists(Guid id)
+        {
+            return _dbContext.Managers.Any(e => e.Id == id);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace SalesScriptConstructor.Domain.Services
 
         public async Task<Manager> GetManagerByIdAsync(Guid id)
         {
-            return await _managersRepository.GetManagerByIdAsync(id);
+            return await _managersRepository.GetManagerByIdAsync(id)?? throw new ArgumentNullException();
         }
 
         public bool ManagerExists(Guid id)
