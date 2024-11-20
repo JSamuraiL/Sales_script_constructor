@@ -55,5 +55,42 @@ namespace SalesScriptConstructor.API.Controllers
             }
             return CreatedAtAction("GetSeller", new { id = seller.Id }, seller);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Seller>> DeleteSeller(Guid id) 
+        {
+            try
+            {
+                await _sellersService.DeleteSellerAsync(id);
+            }
+            catch (ArgumentNullException) 
+            {
+                return NotFound("Продавца с таким id не существует");
+            }
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Seller>> UpdateSeller(Guid id, Seller seller) 
+        {
+            try
+            {
+                await _sellersService.UpdateSellerAsync(id, seller);
+            }
+            catch (ArgumentNullException)
+            {
+                if (!_sellersService.SellerExists(id))
+                {
+                    return NotFound("Менеджера с таким Id не существует");
+                }
+                throw;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest("Ваш Id не соответствует Id в Запросе");
+            }
+
+            return NoContent();
+        }
     }
 }

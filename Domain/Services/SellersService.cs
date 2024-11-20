@@ -21,6 +21,12 @@ namespace SalesScriptConstructor.Domain.Services
             await _sellersRepository.AddSellerAsync(seller);
         }
 
+        public async Task DeleteSellerAsync(Guid id)
+        {
+            if (!_sellersRepository.SellerExists(id)) throw new ArgumentNullException();
+            await _sellersRepository.DeleteSellerAsync(id);
+        }
+
         public async Task<Seller> GetSellerByIdAsync(Guid id)
         {
             return await _sellersRepository.GetSellerByIdAsync(id)?? throw new ArgumentNullException();
@@ -34,6 +40,13 @@ namespace SalesScriptConstructor.Domain.Services
         public bool SellerExists(Guid id)
         {
             return _sellersRepository.SellerExists(id);
+        }
+
+        public async Task UpdateSellerAsync(Guid id, Seller seller)
+        {
+            if (!_sellersRepository.SellerExists(id)) throw new ArgumentNullException();
+            if (seller.Id != id) throw new ArgumentOutOfRangeException();
+            await _sellersRepository.UpdateSellerAsync(seller);
         }
     }
 }

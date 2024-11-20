@@ -23,6 +23,12 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteSellerAsync(Guid id)
+        {
+            _dbContext.Sellers.Remove(await _dbContext.Sellers.FindAsync(id));
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<Seller> GetSellerByIdAsync(Guid id)
         {
             return await _dbContext.Sellers.FindAsync(id);
@@ -34,7 +40,13 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         }
         public bool SellerExists(Guid id)
         {
-            return _dbContext.Managers.Any(e => e.Id == id);
+            return _dbContext.Sellers.Any(e => e.Id == id);
+        }
+
+        public async Task UpdateSellerAsync(Seller seller)
+        {
+            _dbContext.Entry(seller).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

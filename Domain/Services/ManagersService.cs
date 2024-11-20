@@ -1,5 +1,6 @@
 ﻿using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.IManagers;
+using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
 namespace SalesScriptConstructor.Domain.Services
 {
@@ -34,10 +35,8 @@ namespace SalesScriptConstructor.Domain.Services
 
         public async Task UpdateManagerAsync(Guid id, Manager manager)
         {
-            if (id != manager.Id)
-            {
-                throw new ArgumentException();
-            }
+            if (!_managersRepository.ManagerExists(id)) throw new ArgumentNullException();
+            if (manager.Id != id) throw new ArgumentOutOfRangeException();
             await _managersRepository.UpdateManagerAsync(manager);
         }
     }

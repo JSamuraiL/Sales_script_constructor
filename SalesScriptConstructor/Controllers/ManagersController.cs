@@ -39,17 +39,17 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _managersService.UpdateManagerAsync(id, manager);
             }
-            catch (ArgumentException)
-            {
-                return BadRequest("Ваш Id не соответствует Id в Запросе");
-            }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentNullException)
             {
                 if (!_managersService.ManagerExists(id))
                 {
                     return NotFound("Менеджера с таким Id не существует");
                 }
                 throw;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return BadRequest("Ваш Id не соответствует Id в Запросе");
             }
 
             return NoContent();
