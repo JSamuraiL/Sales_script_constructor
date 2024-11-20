@@ -15,9 +15,9 @@ namespace SalesScriptConstructor.Domain.Services
         {
             _sellersRepository = sellersRepository;
         }
-        public async Task<IEnumerable<Seller>> GetSellersByManagerId(Guid id)
+        public async Task<IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId)
         {
-            return await _sellersRepository.GetSellersByManagerId(id);
+            return await _sellersRepository.GetSellersByManagerId(ManagerId);
         }
     }
 }

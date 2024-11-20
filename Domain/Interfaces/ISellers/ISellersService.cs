@@ -9,6 +9,6 @@ namespace SalesScriptConstructor.Domain.Interfaces.ISellers
 {
     public interface ISellersService
     {
-        Task<IEnumerable<Seller>> GetSellersByManagerId(Guid id);
+        Task<IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId);
     }
 }

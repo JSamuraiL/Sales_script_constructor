@@ -16,9 +16,9 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("{ManagerId}")]
-        public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid id) 
+        public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid ManagerId) 
         {
-            return await _sellersService.GetSellersByManagerId(id);
+            return await _sellersService.GetSellersByManagerId(ManagerId);
         }
     }
 }
