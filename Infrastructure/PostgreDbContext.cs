@@ -20,13 +20,9 @@ public partial class PostgreDbContext : DbContext
 
     public virtual DbSet<BlockConnection> BlockConnections { get; set; }
 
-    public virtual DbSet<BlockConnectionType> BlockConnectionTypes { get; set; }
-
     public virtual DbSet<Manager> Managers { get; set; }
 
     public virtual DbSet<Script> Scripts { get; set; }
-
-    public virtual DbSet<ScriptCategory> ScriptCategories { get; set; }
 
     public virtual DbSet<Seller> Sellers { get; set; }
 
@@ -60,20 +56,12 @@ public partial class PostgreDbContext : DbContext
             entity.ToTable("block_connections");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.BlockConnectionTypeId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("block_connection_type_id");
             entity.Property(e => e.NextBlockId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("next_block_id");
             entity.Property(e => e.PreviousBlockId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("previous_block_id");
-
-            entity.HasOne(d => d.BlockConnectionType).WithMany(p => p.BlockConnections)
-                .HasForeignKey(d => d.BlockConnectionTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("block_connections_block_connection_type_id_fkey");
 
             entity.HasOne(d => d.NextBlock).WithMany(p => p.BlockConnectionNextBlocks)
                 .HasForeignKey(d => d.NextBlockId)
@@ -84,19 +72,6 @@ public partial class PostgreDbContext : DbContext
                 .HasForeignKey(d => d.PreviousBlockId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("block_connections_previous_block_id_fkey");
-        });
-
-        modelBuilder.Entity<BlockConnectionType>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("block_connection_types_pkey");
-
-            entity.ToTable("block_connection_types");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Content).HasColumnName("content");
-            entity.Property(e => e.Title)
-                .HasMaxLength(50)
-                .HasColumnName("title");
         });
 
         modelBuilder.Entity<Manager>(entity =>
@@ -132,37 +107,16 @@ public partial class PostgreDbContext : DbContext
             entity.ToTable("scripts");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CategoryId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("category_id");
             entity.Property(e => e.CreatorId).HasColumnName("creator_id");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Title)
                 .HasMaxLength(50)
                 .HasColumnName("title");
 
-            entity.HasOne(d => d.Category).WithMany(p => p.Scripts)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("scripts_category_id_fkey");
-
             entity.HasOne(d => d.Creator).WithMany(p => p.Scripts)
                 .HasForeignKey(d => d.CreatorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("scripts_creator_id_fkey");
-        });
-
-        modelBuilder.Entity<ScriptCategory>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("script_categories_pkey");
-
-            entity.ToTable("script_categories");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Title)
-                .HasMaxLength(50)
-                .HasColumnName("title");
         });
 
         modelBuilder.Entity<Seller>(entity =>
