@@ -6,6 +6,7 @@ using SalesScriptConstructor.Infrastructure;
 using SalesScriptConstructor.Domain.Services;
 using SalesScriptConstructor.Domain.Interfaces.IManagers;
 using SalesScriptConstructor.Infrastructure.Repositories;
+using SalesScriptConstructor.Domain.Interfaces.IScripts;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddTransient<IManagersService, ManagersService>();
 builder.Services.AddTransient<IManagersRepository, ManagersRepository>();
 builder.Services.AddTransient<ISellersService, SellersService>();
 builder.Services.AddTransient<ISellersRepository, SellersRepository>();
+builder.Services.AddTransient<IScriptsService, ScriptsService>();
+builder.Services.AddTransient<IScriptsRepository, ScriptsRepository>();
 builder.Services.AddDbContext<PostgreDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 var app = builder.Build();
