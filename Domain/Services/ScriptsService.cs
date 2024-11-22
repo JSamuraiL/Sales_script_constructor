@@ -21,6 +21,12 @@ namespace SalesScriptConstructor.Domain.Services
             await _scriptsRepository.AddScriptAsync(script);
         }
 
+        public async Task DeleteScriptAsync(int id)
+        {
+            if (!_scriptsRepository.ScriptExists(id)) throw new ArgumentNullException();
+            await _scriptsRepository.DeleteScriptAsync(id);
+        }
+
         public async Task<Script> GetScriptByIdAsync(int id)
         {
             return await _scriptsRepository.GetScriptByIdAsync(id)?? throw new ArgumentNullException();
@@ -28,12 +34,19 @@ namespace SalesScriptConstructor.Domain.Services
 
         public async Task<IEnumerable<Script>> GetScriptsByManagerIdAsync(Guid ManagerId)
         {
-            return await _scriptsRepository.GetScriptsByManagerIdAsync(ManagerId);
+            return await _scriptsRepository.GetScriptsByManagerIdAsync(ManagerId)?? throw new ArgumentNullException();
         }
 
         public bool ScriptExists(int id)
         {
             return _scriptsRepository.ScriptExists(id);
+        }
+
+        public async Task UpdateScriptAsync(Script script, int id)
+        {
+            if (!_scriptsRepository.ScriptExists(id)) throw new ArgumentNullException();
+            if (script.Id != id) throw new ArgumentOutOfRangeException();
+            await _scriptsRepository.UpdateScriptAsync(id);
         }
     }
 }

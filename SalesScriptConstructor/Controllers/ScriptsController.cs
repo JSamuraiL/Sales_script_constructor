@@ -52,5 +52,37 @@ namespace SalesScriptConstructor.API.Controllers
             }
             return CreatedAtAction("GetScript", new { id = script.Id }, script);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Script>> DeleteScript(int id) 
+        {
+            try
+            {
+                await _scriptsService.DeleteScriptAsync(id);
+            }
+            catch (ArgumentNullException) 
+            {
+                return NotFound("Скрипта с таким id не существует");
+            }
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Script>> UpdateScript(Script script,int id) 
+        {
+            try
+            {
+                await _scriptsService.UpdateScriptAsync(script, id);
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound("Скрипта с таким id не существует");
+            }
+            catch (ArgumentOutOfRangeException) 
+            {
+                return BadRequest("Ваш Id не соответствует Id в запросе");
+            }
+            return NoContent();
+        }
     }
 }

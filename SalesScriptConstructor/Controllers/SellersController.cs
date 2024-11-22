@@ -87,7 +87,7 @@ namespace SalesScriptConstructor.API.Controllers
             }
             catch (ArgumentOutOfRangeException)
             {
-                return BadRequest("Ваш Id не соответствует Id в Запросе");
+                return BadRequest("Ваш Id не соответствует Id в запросе");
             }
 
             return NoContent();

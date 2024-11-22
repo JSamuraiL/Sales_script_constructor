@@ -23,6 +23,12 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteScriptAsync(int id)
+        {
+            _dbContext.Scripts.Remove(await _dbContext.Scripts.FindAsync(id));
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<Script> GetScriptByIdAsync(int id)
         {
             return await _dbContext.Scripts.FindAsync(id);
@@ -36,6 +42,12 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         public bool ScriptExists(int id)
         {
             return _dbContext.Scripts.Any(e => e.Id == id);
+        }
+
+        public async Task UpdateScriptAsync(int id)
+        {
+            _dbContext.Entry(id).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
