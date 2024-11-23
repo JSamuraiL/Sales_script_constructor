@@ -27,12 +27,22 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return NotFound("Скрипт с таким Id не существует");
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
         }
 
         [HttpGet("manager/{ManagerId}")]
         public async Task<IEnumerable<Script>> GetLinkedScripts(Guid ManagerId) 
         {
-            return await _scriptsService.GetScriptsByManagerIdAsync(ManagerId);
+            try { 
+                return await _scriptsService.GetScriptsByManagerIdAsync(ManagerId);
+            }
+            catch (Exception)
+            {
+                return (IEnumerable<Script>)StatusCode(500, "Неизвестная ошибка");
+            }
         }
 
         [HttpPost("{id}")]
@@ -50,6 +60,10 @@ namespace SalesScriptConstructor.API.Controllers
                 }
                 else throw;
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
             return CreatedAtAction("GetScript", new { id = script.Id }, script);
         }
 
@@ -63,6 +77,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentNullException) 
             {
                 return NotFound("Скрипта с таким id не существует");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return NoContent();
         }
@@ -81,6 +99,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentOutOfRangeException) 
             {
                 return BadRequest("Ваш Id не соответствует Id в запросе");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return NoContent();
         }

@@ -28,6 +28,10 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return NotFound("Менеджера с таким Id не существует");
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
         }
         
         // PUT: api/Managers/5
@@ -50,6 +54,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentOutOfRangeException)
             {
                 return BadRequest("Ваш Id не соответствует Id в запросе");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
 
             return NoContent();
@@ -75,6 +83,10 @@ namespace SalesScriptConstructor.API.Controllers
                     throw;
                 }
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
 
             return CreatedAtAction("GetManager", new { id = manager.Id }, manager);
         }
@@ -90,6 +102,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentNullException)
             {
                 return NotFound("Менеджера с таким Id не существует");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return NoContent();
         }

@@ -27,6 +27,10 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return NotFound("Соединения с таким id не существует");
             }
+            catch (Exception) 
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
         }
 
         [HttpPost("{id}")]
@@ -42,6 +46,10 @@ namespace SalesScriptConstructor.API.Controllers
                     return BadRequest("Соединение с таким id уже существует");
                 else throw;
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
             return NoContent();
         }
 
@@ -55,6 +63,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentNullException) 
             {
                 return NotFound("Соединения с таким id не существует");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return NoContent();
         }

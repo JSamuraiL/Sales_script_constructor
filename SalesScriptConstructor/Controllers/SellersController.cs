@@ -19,7 +19,14 @@ namespace SalesScriptConstructor.API.Controllers
         [HttpGet("manager/{ManagerId}")]
         public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid ManagerId) 
         {
-            return await _sellersService.GetSellersByManagerId(ManagerId);
+            try 
+            { 
+                return await _sellersService.GetSellersByManagerId(ManagerId);
+            }
+            catch (Exception)
+            {
+                return (IEnumerable<Seller>)StatusCode(500, "Неизвестная ошибка");
+            }
         }
 
         [HttpGet("{id}")]
@@ -32,6 +39,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentNullException) 
             {
                 return NotFound("Продавца с таким Id не существует");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
         }
 
@@ -53,6 +64,10 @@ namespace SalesScriptConstructor.API.Controllers
                     throw;
                 }
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
             return CreatedAtAction("GetSeller", new { id = seller.Id }, seller);
         }
 
@@ -66,6 +81,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentNullException) 
             {
                 return NotFound("Продавца с таким id не существует");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return NoContent();
         }
@@ -88,6 +107,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentOutOfRangeException)
             {
                 return BadRequest("Ваш Id не соответствует Id в запросе");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
 
             return NoContent();

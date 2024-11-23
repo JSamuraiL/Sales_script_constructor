@@ -27,12 +27,23 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return NotFound("Блок с данным id не найден");
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
         }
 
         [HttpGet("manager/{ScriptId}")]
         public async Task<IEnumerable<Block>> GetBlocks(int ScriptId) 
         {
-            return await _blocksService.GetBlocksByScriptIdAsync(ScriptId);
+            try 
+            { 
+                return await _blocksService.GetBlocksByScriptIdAsync(ScriptId);
+            }
+            catch (Exception)
+            {
+                return (IEnumerable<Block>)StatusCode(500, "Неизвестная ошибка");
+            }
         }
 
         [HttpPost("{id}")]
@@ -49,6 +60,10 @@ namespace SalesScriptConstructor.API.Controllers
                     return BadRequest("Блок с таким id уже существует");
                 }
                 else throw;
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return CreatedAtAction("GetBlock", new { id = block.Id }, block);
         }
@@ -68,6 +83,10 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return BadRequest("Ваш Id не соответствует Id в запросе");
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
+            }
             return NoContent();
         }
         [HttpDelete("{id}")]
@@ -80,6 +99,10 @@ namespace SalesScriptConstructor.API.Controllers
             catch (ArgumentNullException) 
             {
                 return NotFound("Блок с данным id не найден");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Неизвестная ошибка");
             }
             return NoContent();
         }
