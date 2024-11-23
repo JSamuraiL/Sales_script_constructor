@@ -49,7 +49,7 @@ namespace SalesScriptConstructor.API.Controllers
             }
             catch (ArgumentOutOfRangeException)
             {
-                return BadRequest("Ваш Id не соответствует Id в Запросе");
+                return BadRequest("Ваш Id не соответствует Id в запросе");
             }
 
             return NoContent();
@@ -68,7 +68,7 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 if (_managersService.ManagerExists(manager.Id))
                 {
-                    return Conflict("Менеджер с таким Id уже существует");
+                    return BadRequest("Менеджер с таким Id уже существует");
                 }
                 else
                 {

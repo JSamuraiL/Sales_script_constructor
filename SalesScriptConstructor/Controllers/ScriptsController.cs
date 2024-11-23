@@ -46,7 +46,7 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 if (_scriptsService.ScriptExists(script.Id)) 
                 {
-                    return Conflict("Скрипт с таким id уже существует");
+                    return BadRequest("Скрипт с таким id уже существует");
                 }
                 else throw;
             }

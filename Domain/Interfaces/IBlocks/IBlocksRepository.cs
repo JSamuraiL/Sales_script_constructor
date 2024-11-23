@@ -10,9 +10,9 @@ namespace SalesScriptConstructor.Domain.Interfaces.IBlocks
     public interface IBlocksRepository
     {
         Task<Block> GetBlockByIdAsync(int id);
-        Task<IEnumerable<Block>> GetBlocksByManagerIdAsync(Guid ManagerId);
+        Task<IEnumerable<Block>> GetBlocksByScriptIdAsync(int ScriptId);
         Task AddBlockAsync(Block block);
-        Task UpdateBlockAsync(int id);
+        Task UpdateBlockAsync(Block block);
         Task DeleteBlockAsync(int id);
         bool BlockExists(int id);
     }

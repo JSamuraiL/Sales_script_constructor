@@ -16,19 +16,20 @@ namespace SalesScriptConstructor.Domain.Services
             _blocksRepository = blocksRepository;
         }
 
-        public Task AddBlockAsync(Block block)
+        public async Task AddBlockAsync(Block block)
         {
-            throw new NotImplementedException();
+            await _blocksRepository.AddBlockAsync(block);
         }
 
         public bool BlockExists(int id)
         {
-            throw new NotImplementedException();
+            return _blocksRepository.BlockExists(id);
         }
 
-        public Task DeleteBlockAsync(int id)
+        public async Task DeleteBlockAsync(int id)
         {
-            throw new NotImplementedException();
+            if (!_blocksRepository.BlockExists(id)) throw new ArgumentNullException();
+            await _blocksRepository.DeleteBlockAsync(id);
         }
 
         public async Task<Block> GetBlockByIdAsync(int id)
@@ -36,14 +37,16 @@ namespace SalesScriptConstructor.Domain.Services
             return await _blocksRepository.GetBlockByIdAsync(id)?? throw new ArgumentNullException();
         }
 
-        public Task<IEnumerable<Block>> GetBlocksByManagerIdAsync(Guid ManagerId)
+        public async Task<IEnumerable<Block>> GetBlocksByScriptIdAsync(int ScriptId)
         {
-            throw new NotImplementedException();
+            return await _blocksRepository.GetBlocksByScriptIdAsync(ScriptId);
         }
 
-        public Task UpdateBlockAsync(int id)
+        public async Task UpdateBlockAsync(Block block,int id)
         {
-            throw new NotImplementedException();
+            if (!_blocksRepository.BlockExists(id)) throw new ArgumentNullException();
+            if (block.Id != id) throw new ArgumentOutOfRangeException();
+            await _blocksRepository.UpdateBlockAsync(block);
         }
     }
 }

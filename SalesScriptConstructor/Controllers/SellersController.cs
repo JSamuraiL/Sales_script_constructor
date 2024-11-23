@@ -46,7 +46,7 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 if (_sellersService.SellerExists(seller.Id)) 
                 {
-                    return Conflict("Продавец с таким Id уже существует");
+                    return BadRequest("Продавец с таким Id уже существует");
                 }
                 else
                 {

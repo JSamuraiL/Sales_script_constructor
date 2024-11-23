@@ -1,4 +1,5 @@
-﻿using SalesScriptConstructor.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.IBlocks;
 using System;
 using System.Collections.Generic;
@@ -15,19 +16,21 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         {
             _dbContext = dbContext;
         }
-        public Task AddBlockAsync(Block block)
+        public async Task AddBlockAsync(Block block)
         {
-            throw new NotImplementedException();
+            await _dbContext.Blocks.AddAsync(block);
+            await _dbContext.SaveChangesAsync();
         }
 
         public bool BlockExists(int id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Blocks.Any(b => b.Id == id);
         }
 
-        public Task DeleteBlockAsync(int id)
+        public async Task DeleteBlockAsync(int id)
         {
-            throw new NotImplementedException();
+            _dbContext.Blocks.Remove(await _dbContext.Blocks.FindAsync(id));
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Block> GetBlockByIdAsync(int id)
@@ -35,14 +38,15 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
             return await _dbContext.Blocks.FindAsync(id);
         }
 
-        public Task<IEnumerable<Block>> GetBlocksByManagerIdAsync(Guid ManagerId)
+        public async Task<IEnumerable<Block>> GetBlocksByScriptIdAsync(int ScriptId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Blocks.Where(Block => Block.ScriptId == ScriptId).ToListAsync();
         }
 
-        public Task UpdateBlockAsync(int id)
+        public async Task UpdateBlockAsync(Block block)
         {
-            throw new NotImplementedException();
+            _dbContext.Entry(block).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
