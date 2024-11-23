@@ -50,7 +50,7 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return StatusCode(500, "Неизвестная ошибка");
             }
-            return NoContent();
+            return CreatedAtAction("GetBlockConnection", new { id = blockConnection.Id }, blockConnection);
         }
 
         [HttpDelete]
