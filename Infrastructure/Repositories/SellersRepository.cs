@@ -19,34 +19,34 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
 
         public async Task AddSellerAsync(Seller seller)
         {
-            await _dbContext.Sellers.AddAsync(seller);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlAsync
+                ($"INSERT INTO sellers (id, mail, hashed_password, name, surname, patronymic, manager_id) VALUES ({
+                    seller.Id},{seller.Mail},{seller.HashedPassword},{seller.Name},{seller.Surname},{seller.Patronymic},{seller.ManagerId})");
         }
 
         public async Task DeleteSellerAsync(Guid id)
         {
-            _dbContext.Sellers.Remove(await _dbContext.Sellers.FindAsync(id));
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlAsync($"DELETE FROM sellers WHERE id='{id}'");
         }
 
         public async Task<Seller> GetSellerByIdAsync(Guid id)
         {
-            return await _dbContext.Sellers.FindAsync(id);
+            return await _dbContext.Sellers.FromSqlRaw($"SELECT * FROM sellers WHERE id='{id}'").FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId)
         {
-            return await _dbContext.Sellers.Where(Seller => Seller.ManagerId == ManagerId).ToListAsync();
+            return await _dbContext.Sellers.FromSqlRaw($"SELECT * FROM sellers WHERE manager_id='{ManagerId}'").ToListAsync();
         }
         public bool SellerExists(Guid id)
         {
-            return _dbContext.Sellers.Any(e => e.Id == id);
+            return _dbContext.Sellers.FromSqlRaw($"SELECT * FROM sellers WHERE id='{id}'").Any();
         }
 
         public async Task UpdateSellerAsync(Seller seller)
         {
-            _dbContext.Entry(seller).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlAsync($"UPDATE sellers SET name = {seller.Name}, surname = {seller.Surname},patronymic = {
+                seller.Patronymic}, manager_id = {seller.ManagerId}, mail = {seller.Mail}, hashed_password = {seller.HashedPassword}");
         }
     }
 }
