@@ -1,4 +1,5 @@
-﻿using SalesScriptConstructor.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.IBlockConnections;
 using System;
 using System.Collections.Generic;
@@ -17,24 +18,24 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         }
         public async Task AddBlockConnectionAsync(BlockConnection blockConnection)
         {
-            await _dbContext.BlockConnections.AddAsync(blockConnection);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlAsync
+                ($"INSERT INTO block_connections (id, previous_block_id, next_block_id) VALUES ({blockConnection.Id}, {
+                    blockConnection.PreviousBlockId}, {blockConnection.NextBlockId})");
         }
 
         public bool BlockConnectionExists(int id)
         {
-            return _dbContext.BlockConnections.Any(c => c.Id == id);
+            return _dbContext.BlockConnections.FromSqlRaw($"SELECT * FROM sellers WHERE id='{id}'").Any();
         }
 
         public async Task DeleteBlockConnectionAsync(int id)
         {
-            _dbContext.BlockConnections.Remove(await _dbContext.BlockConnections.FindAsync(id));
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlAsync($"DELETE FROM block_connections WHERE id='{id}'");
         }
 
         public async Task<BlockConnection> GetBlockConnectionByIdAsync(int id)
         {
-            return await _dbContext.BlockConnections.FindAsync(id);
+            return await _dbContext.BlockConnections.FromSqlRaw($"SELECT * FROM block_connections WHERE id='{id}'").FirstOrDefaultAsync();
         }
     }
 }
