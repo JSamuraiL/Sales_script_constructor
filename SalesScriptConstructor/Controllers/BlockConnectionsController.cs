@@ -10,10 +10,12 @@ namespace SalesScriptConstructor.API.Controllers
     [ApiController]
     public class BlockConnectionsController : ControllerBase
     {
+        private readonly ILogger<BlockConnectionsController> _logger;
         private readonly IBlockConnectionsService _blockConnectionsService;
-        public BlockConnectionsController(IBlockConnectionsService blockConnectionsService)
+        public BlockConnectionsController(IBlockConnectionsService blockConnectionsService, ILogger<BlockConnectionsController> logger)
         {
             _blockConnectionsService = blockConnectionsService;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -23,13 +25,15 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return await _blockConnectionsService.GetBlockConnectionByIdAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Соединения с таким id не существует");
             }
-            catch (Exception) 
+            catch (Exception ex) 
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -40,15 +44,19 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _blockConnectionsService.AddBlockConnectionAsync(blockConnection);
             }
-            catch (DbUpdateException) 
+            catch (DbUpdateException ex) 
             {
                 if (_blockConnectionsService.BlockConnectionExists(blockConnection.Id)) 
+                { 
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return BadRequest("Соединение с таким id уже существует");
+                }
                 else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return CreatedAtAction("GetBlockConnection", new { id = blockConnection.Id }, blockConnection);
         }
@@ -60,13 +68,15 @@ namespace SalesScriptConstructor.API.Controllers
             { 
                 await _blockConnectionsService.DeleteBlockConnectionAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Соединения с таким id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }
