@@ -12,7 +12,7 @@ namespace SalesScriptConstructor.Domain.Interfaces.IScripts
         Task<Script> GetScriptByIdAsync(int id);
         Task<IEnumerable<Script>> GetScriptsByManagerIdAsync(Guid ManagerId);
         Task AddScriptAsync(Script script);
-        Task UpdateScriptAsync(int id);
+        Task UpdateScriptAsync(Script script);
         Task DeleteScriptAsync(int id);
         bool ScriptExists(int id);
     }

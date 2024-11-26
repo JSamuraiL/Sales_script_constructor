@@ -86,19 +86,15 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Script>> UpdateScript(Script script,int id) 
+        public async Task<ActionResult<Script>> UpdateScript(Script script) 
         {
             try
             {
-                await _scriptsService.UpdateScriptAsync(script, id);
+                await _scriptsService.UpdateScriptAsync(script);
             }
             catch (ArgumentNullException)
             {
                 return NotFound("Скрипта с таким id не существует");
-            }
-            catch (ArgumentOutOfRangeException) 
-            {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
             }
             catch (Exception)
             {

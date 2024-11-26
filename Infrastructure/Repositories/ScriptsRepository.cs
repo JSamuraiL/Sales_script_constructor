@@ -44,9 +44,9 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
             return _dbContext.Scripts.Any(e => e.Id == id);
         }
 
-        public async Task UpdateScriptAsync(int id)
+        public async Task UpdateScriptAsync(Script script)
         {
-            _dbContext.Entry(id).State = EntityState.Modified;
+            _dbContext.Entry(script).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
     }

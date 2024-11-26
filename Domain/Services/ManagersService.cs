@@ -33,10 +33,9 @@ namespace SalesScriptConstructor.Domain.Services
             return _managersRepository.ManagerExists(id);
         }
 
-        public async Task UpdateManagerAsync(Guid id, Manager manager)
+        public async Task UpdateManagerAsync(Manager manager)
         {
-            if (!_managersRepository.ManagerExists(id)) throw new ArgumentNullException();
-            if (manager.Id != id) throw new ArgumentOutOfRangeException();
+            if (!_managersRepository.ManagerExists(manager.Id)) throw new ArgumentNullException();
             await _managersRepository.UpdateManagerAsync(manager);
         }
     }

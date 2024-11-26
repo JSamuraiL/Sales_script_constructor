@@ -37,23 +37,19 @@ namespace SalesScriptConstructor.API.Controllers
         // PUT: api/Managers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> ChangeManagerDetails(Guid id, Manager manager)
+        public async Task<IActionResult> ChangeManagerDetails(Manager manager)
         {
             try
             {
-                await _managersService.UpdateManagerAsync(id, manager);
+                await _managersService.UpdateManagerAsync(manager);
             }
             catch (ArgumentNullException)
             {
-                if (!_managersService.ManagerExists(id))
+                if (!_managersService.ManagerExists(manager.Id))
                 {
                     return NotFound("Менеджера с таким Id не существует");
                 }
                 throw;
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
             }
             catch (Exception)
             {

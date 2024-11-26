@@ -12,7 +12,7 @@ namespace SalesScriptConstructor.Domain.Interfaces.IBlocks
         Task<Block> GetBlockByIdAsync(int id);
         Task<IEnumerable<Block>> GetBlocksByScriptIdAsync(int ScriptId);
         Task AddBlockAsync(Block block);
-        Task UpdateBlockAsync(Block block,int id);
+        Task UpdateBlockAsync(Block block);
         Task DeleteBlockAsync(int id);
         bool BlockExists(int id);
     }

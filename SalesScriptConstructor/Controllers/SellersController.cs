@@ -90,23 +90,19 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Seller>> UpdateSeller(Guid id, Seller seller) 
+        public async Task<ActionResult<Seller>> UpdateSeller(Seller seller) 
         {
             try
             {
-                await _sellersService.UpdateSellerAsync(id, seller);
+                await _sellersService.UpdateSellerAsync(seller);
             }
             catch (ArgumentNullException)
             {
-                if (!_sellersService.SellerExists(id))
+                if (!_sellersService.SellerExists(seller.Id))
                 {
                     return NotFound("Менеджера с таким Id не существует");
                 }
                 throw;
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
             }
             catch (Exception)
             {

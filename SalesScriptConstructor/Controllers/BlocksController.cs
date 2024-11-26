@@ -69,19 +69,15 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Block>> ChangeBlock (Block block, int id) 
+        public async Task<ActionResult<Block>> ChangeBlock (Block block) 
         {
             try
             {
-                await _blocksService.UpdateBlockAsync(block, id);
+                await _blocksService.UpdateBlockAsync(block);
             }
             catch (ArgumentNullException)
             {
                 return NotFound("Блок с данным id не найден");
-            }
-            catch (ArgumentOutOfRangeException) 
-            {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
             }
             catch (Exception)
             {
