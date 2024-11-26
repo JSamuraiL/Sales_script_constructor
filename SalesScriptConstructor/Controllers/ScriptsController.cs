@@ -11,9 +11,12 @@ namespace SalesScriptConstructor.API.Controllers
     public class ScriptsController : ControllerBase
     {
         private readonly IScriptsService _scriptsService;
-        public ScriptsController(IScriptsService scriptsService)
+        private readonly ILogger<BlockConnectionsController> _logger;
+
+        public ScriptsController(IScriptsService scriptsService, ILogger<BlockConnectionsController> logger)
         {
             _scriptsService = scriptsService;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -23,13 +26,15 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return await _scriptsService.GetScriptByIdAsync(id);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Скрипт с таким Id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -39,9 +44,10 @@ namespace SalesScriptConstructor.API.Controllers
             try { 
                 return await _scriptsService.GetScriptsByManagerIdAsync(ManagerId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return (IEnumerable<Script>)StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return (IEnumerable<Script>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -52,17 +58,19 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _scriptsService.AddScriptAsync(script);
             }
-            catch (DbUpdateException) 
+            catch (DbUpdateException ex) 
             {
                 if (_scriptsService.ScriptExists(script.Id)) 
                 {
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return BadRequest("Скрипт с таким id уже существует");
                 }
                 else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return CreatedAtAction("GetScript", new { id = script.Id }, script);
         }
@@ -74,35 +82,35 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _scriptsService.DeleteScriptAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Скрипта с таким id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Script>> UpdateScript(Script script,int id) 
+        public async Task<ActionResult<Script>> UpdateScript(Script script) 
         {
             try
             {
-                await _scriptsService.UpdateScriptAsync(script, id);
+                await _scriptsService.UpdateScriptAsync(script);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Скрипта с таким id не существует");
             }
-            catch (ArgumentOutOfRangeException) 
+            catch (Exception ex)
             {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }

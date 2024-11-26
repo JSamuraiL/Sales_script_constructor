@@ -42,10 +42,9 @@ namespace SalesScriptConstructor.Domain.Services
             return _sellersRepository.SellerExists(id);
         }
 
-        public async Task UpdateSellerAsync(Guid id, Seller seller)
+        public async Task UpdateSellerAsync(Seller seller)
         {
-            if (!_sellersRepository.SellerExists(id)) throw new ArgumentNullException();
-            if (seller.Id != id) throw new ArgumentOutOfRangeException();
+            if (!_sellersRepository.SellerExists(seller.Id)) throw new ArgumentNullException();
             await _sellersRepository.UpdateSellerAsync(seller);
         }
     }

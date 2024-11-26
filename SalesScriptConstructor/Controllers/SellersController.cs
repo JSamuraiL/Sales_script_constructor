@@ -11,9 +11,12 @@ namespace SalesScriptConstructor.API.Controllers
     public class SellersController : ControllerBase
     {
         private readonly ISellersService _sellersService;
-        public SellersController (ISellersService sellersService)
+        private readonly ILogger<BlockConnectionsController> _logger;
+
+        public SellersController (ISellersService sellersService, ILogger<BlockConnectionsController> logger)
         {
             _sellersService = sellersService;
+            _logger = logger;
         }
 
         [HttpGet("manager/{ManagerId}")]
@@ -23,9 +26,10 @@ namespace SalesScriptConstructor.API.Controllers
             { 
                 return await _sellersService.GetSellersByManagerId(ManagerId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return (IEnumerable<Seller>)StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return (IEnumerable<Seller>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -36,13 +40,15 @@ namespace SalesScriptConstructor.API.Controllers
             { 
                 return await _sellersService.GetSellerByIdAsync(id); 
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Продавца с таким Id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -53,10 +59,11 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _sellersService.AddSellerAsync(seller);
             }
-            catch (DbUpdateException) 
+            catch (DbUpdateException ex) 
             {
                 if (_sellersService.SellerExists(seller.Id)) 
                 {
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return BadRequest("Продавец с таким Id уже существует");
                 }
                 else
@@ -64,9 +71,10 @@ namespace SalesScriptConstructor.API.Controllers
                     throw;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return CreatedAtAction("GetSeller", new { id = seller.Id }, seller);
         }
@@ -78,39 +86,39 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _sellersService.DeleteSellerAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Продавца с таким id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Seller>> UpdateSeller(Guid id, Seller seller) 
+        public async Task<ActionResult<Seller>> UpdateSeller(Seller seller) 
         {
             try
             {
-                await _sellersService.UpdateSellerAsync(id, seller);
+                await _sellersService.UpdateSellerAsync(seller);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
-                if (!_sellersService.SellerExists(id))
+                if (!_sellersService.SellerExists(seller.Id))
                 {
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return NotFound("Менеджера с таким Id не существует");
                 }
                 throw;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (Exception ex)
             {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
 
             return NoContent();

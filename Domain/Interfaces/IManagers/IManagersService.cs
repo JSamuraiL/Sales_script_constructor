@@ -11,7 +11,7 @@ namespace SalesScriptConstructor.Domain.Interfaces.IManagers
     {
         Task<Manager> GetManagerByIdAsync(Guid id);
         Task AddManagerAsync(Manager manager);
-        Task UpdateManagerAsync(Guid id,Manager manager);
+        Task UpdateManagerAsync(Manager manager);
         Task DeleteManagerAsync(Guid id);
         bool ManagerExists(Guid id);
     }

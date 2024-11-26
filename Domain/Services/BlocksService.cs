@@ -42,10 +42,9 @@ namespace SalesScriptConstructor.Domain.Services
             return await _blocksRepository.GetBlocksByScriptIdAsync(ScriptId);
         }
 
-        public async Task UpdateBlockAsync(Block block,int id)
+        public async Task UpdateBlockAsync(Block block)
         {
-            if (!_blocksRepository.BlockExists(id)) throw new ArgumentNullException();
-            if (block.Id != id) throw new ArgumentOutOfRangeException();
+            if (!_blocksRepository.BlockExists(block.Id)) throw new ArgumentNullException();
             await _blocksRepository.UpdateBlockAsync(block);
         }
     }

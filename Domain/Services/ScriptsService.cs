@@ -42,11 +42,10 @@ namespace SalesScriptConstructor.Domain.Services
             return _scriptsRepository.ScriptExists(id);
         }
 
-        public async Task UpdateScriptAsync(Script script, int id)
+        public async Task UpdateScriptAsync(Script script)
         {
-            if (!_scriptsRepository.ScriptExists(id)) throw new ArgumentNullException();
-            if (script.Id != id) throw new ArgumentOutOfRangeException();
-            await _scriptsRepository.UpdateScriptAsync(id);
+            if (!_scriptsRepository.ScriptExists(script.Id)) throw new ArgumentNullException();
+            await _scriptsRepository.UpdateScriptAsync(script);
         }
     }
 }

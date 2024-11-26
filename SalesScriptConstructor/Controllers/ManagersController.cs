@@ -10,10 +10,12 @@ namespace SalesScriptConstructor.API.Controllers
     public class ManagersController : ControllerBase
     {
         private readonly IManagersService _managersService;
+        private readonly ILogger<BlockConnectionsController> _logger;
 
-        public ManagersController(IManagersService managersService)
+        public ManagersController(IManagersService managersService, ILogger<BlockConnectionsController> logger)
         {
             _managersService = managersService;
+            _logger = logger;
         }
 
         // GET: api/Managers/5
@@ -24,40 +26,40 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 return await _managersService.GetManagerByIdAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Менеджера с таким Id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
         
         // PUT: api/Managers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> ChangeManagerDetails(Guid id, Manager manager)
+        public async Task<IActionResult> ChangeManagerDetails(Manager manager)
         {
             try
             {
-                await _managersService.UpdateManagerAsync(id, manager);
+                await _managersService.UpdateManagerAsync(manager);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
-                if (!_managersService.ManagerExists(id))
+                if (!_managersService.ManagerExists(manager.Id))
                 {
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return NotFound("Менеджера с таким Id не существует");
                 }
                 throw;
             }
-            catch (ArgumentOutOfRangeException)
+            catch (Exception ex)
             {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
 
             return NoContent();
@@ -72,10 +74,11 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _managersService.AddManagerAsync(manager);
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
                 if (_managersService.ManagerExists(manager.Id))
                 {
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return BadRequest("Менеджер с таким Id уже существует");
                 }
                 else
@@ -83,9 +86,10 @@ namespace SalesScriptConstructor.API.Controllers
                     throw;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
 
             return CreatedAtAction("GetManager", new { id = manager.Id }, manager);
@@ -99,13 +103,15 @@ namespace SalesScriptConstructor.API.Controllers
             { 
                 await _managersService.DeleteManagerAsync(id);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Менеджера с таким Id не существует");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }

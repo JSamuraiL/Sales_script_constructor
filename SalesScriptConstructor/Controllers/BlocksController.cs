@@ -11,9 +11,12 @@ namespace SalesScriptConstructor.API.Controllers
     public class BlocksController : ControllerBase
     {
         private readonly IBlocksService _blocksService;
-        public BlocksController(IBlocksService blocksService) 
+        private readonly ILogger<BlockConnectionsController> _logger;
+
+        public BlocksController(IBlocksService blocksService, ILogger<BlockConnectionsController> logger) 
         {
             _blocksService = blocksService;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -23,13 +26,15 @@ namespace SalesScriptConstructor.API.Controllers
             { 
                 return await _blocksService.GetBlockByIdAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Блок с данным id не найден");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -40,9 +45,10 @@ namespace SalesScriptConstructor.API.Controllers
             { 
                 return await _blocksService.GetBlocksByScriptIdAsync(ScriptId);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return (IEnumerable<Block>)StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return (IEnumerable<Block>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
@@ -53,39 +59,39 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _blocksService.AddBlockAsync(block);
             }
-            catch(DbUpdateException) 
+            catch(DbUpdateException ex) 
             {
                 if (_blocksService.BlockExists(block.Id)) 
-                { 
+                {
+                    _logger.LogWarning(ex, "Warning in SomeAction");
                     return BadRequest("Блок с таким id уже существует");
                 }
                 else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return CreatedAtAction("GetBlock", new { id = block.Id }, block);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Block>> ChangeBlock (Block block, int id) 
+        public async Task<ActionResult<Block>> ChangeBlock (Block block) 
         {
             try
             {
-                await _blocksService.UpdateBlockAsync(block, id);
+                await _blocksService.UpdateBlockAsync(block);
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Блок с данным id не найден");
             }
-            catch (ArgumentOutOfRangeException) 
+            catch (Exception ex)
             {
-                return BadRequest("Ваш Id не соответствует Id в запросе");
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }
@@ -96,13 +102,15 @@ namespace SalesScriptConstructor.API.Controllers
             {
                 await _blocksService.DeleteBlockAsync(id);
             }
-            catch (ArgumentNullException) 
+            catch (ArgumentNullException ex) 
             {
+                _logger.LogWarning(ex, "Warning in SomeAction");
                 return NotFound("Блок с данным id не найден");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Неизвестная ошибка");
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
             return NoContent();
         }
