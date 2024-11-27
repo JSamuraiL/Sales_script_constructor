@@ -10,9 +10,9 @@ namespace SalesScriptConstructor.API.Controllers
     public class ManagersController : ControllerBase
     {
         private readonly IManagersService _managersService;
-        private readonly ILogger<BlockConnectionsController> _logger;
+        private readonly ILogger<ManagersController> _logger;
 
-        public ManagersController(IManagersService managersService, ILogger<BlockConnectionsController> logger)
+        public ManagersController(IManagersService managersService, ILogger<ManagersController> logger)
         {
             _managersService = managersService;
             _logger = logger;

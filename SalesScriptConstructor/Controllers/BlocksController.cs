@@ -11,9 +11,9 @@ namespace SalesScriptConstructor.API.Controllers
     public class BlocksController : ControllerBase
     {
         private readonly IBlocksService _blocksService;
-        private readonly ILogger<BlockConnectionsController> _logger;
+        private readonly ILogger<BlocksController> _logger;
 
-        public BlocksController(IBlocksService blocksService, ILogger<BlockConnectionsController> logger) 
+        public BlocksController(IBlocksService blocksService, ILogger<BlocksController> logger) 
         {
             _blocksService = blocksService;
             _logger = logger;
