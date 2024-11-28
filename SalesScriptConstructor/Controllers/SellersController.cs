@@ -20,16 +20,17 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("manager/{ManagerId}")]
-        public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid ManagerId) 
+        public async Task<IActionResult> GetLinkedSellers(Guid ManagerId)
         {
-            try 
-            { 
-                return await _sellersService.GetSellersByManagerId(ManagerId);
+            try
+            {
+                var sellers = await _sellersService.GetSellersByManagerId(ManagerId);
+                return Ok(sellers);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in SomeAction.");
-                return (IEnumerable<Seller>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
