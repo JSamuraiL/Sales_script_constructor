@@ -40,7 +40,7 @@ namespace TestControllers.TestSellers
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsInstanceOfType<OkObjectResult>(result);
             var objectResult = result as OkObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
             Assert.AreEqual(sellers,objectResult.Value);
@@ -58,7 +58,7 @@ namespace TestControllers.TestSellers
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ObjectResult));
+            Assert.IsInstanceOfType<ObjectResult>(result);
             var objectResult = result as ObjectResult;
             Assert.AreEqual(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
             Assert.AreEqual("Неизвестная ошибка, уже исправляем", objectResult.Value);

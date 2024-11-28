@@ -35,11 +35,12 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Seller>> GetSeller(Guid id)
+        public async Task<IActionResult> GetSeller(Guid id)
         {
             try 
-            { 
-                return await _sellersService.GetSellerByIdAsync(id); 
+            {
+                var seller = await _sellersService.GetSellerByIdAsync(id); 
+                return Ok(seller);
             }
             catch (ArgumentNullException ex) 
             {
