@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
+using SalesScriptConstructor.Domain.Interfaces.IBlocks;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
 namespace TestControllers.TestBlocks;
@@ -11,27 +12,27 @@ namespace TestControllers.TestBlocks;
 [TestClass]
 public class DeleteBlock
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<BlocksController>> _mockLogger;
+    private Mock<IBlocksService> _mockBlocksService;
+    private BlocksController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockBlocksService = new Mock<IBlocksService>();
+        _mockLogger = new Mock<ILogger<BlocksController>>();
+        _controller = new BlocksController(_mockBlocksService.Object, _mockLogger.Object);
     }
 
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).Returns(Task.CompletedTask);
+        int id = 1;
+        _mockBlocksService.Setup(s => s.DeleteBlockAsync(id)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.DeleteSeller(id);
+        var result = await _controller.DeleteBlock(id);
 
         //Assert
         Assert.IsNotNull(result);
@@ -44,11 +45,11 @@ public class DeleteBlock
     public async Task NotFound()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).ThrowsAsync(new ArgumentNullException());
+        int id = 1;
+        _mockBlocksService.Setup(s => s.DeleteBlockAsync(id)).ThrowsAsync(new ArgumentNullException());
 
         //Act
-        var result = await _controller.DeleteSeller(id);
+        var result = await _controller.DeleteBlock(id);
 
         //Assert
         Assert.IsNotNull(result);
@@ -61,11 +62,11 @@ public class DeleteBlock
     public async Task Fatal()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).ThrowsAsync(new Exception());
+        int id = 1;
+        _mockBlocksService.Setup(s => s.DeleteBlockAsync(id)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.DeleteSeller(id);
+        var result = await _controller.DeleteBlock(id);
 
         //Assert
         Assert.IsNotNull(result);

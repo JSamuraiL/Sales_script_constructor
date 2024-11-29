@@ -59,7 +59,7 @@ public class GetBlockConnection
         Assert.IsInstanceOfType<NotFoundObjectResult>(result);
         var objectResult = result as NotFoundObjectResult;
         Assert.AreEqual(StatusCodes.Status404NotFound, objectResult.StatusCode);
-        Assert.AreEqual("Продавца с таким Id не существует", objectResult.Value);
+        Assert.AreEqual("Соединения с таким id не существует", objectResult.Value);
     }
 
     [TestMethod]

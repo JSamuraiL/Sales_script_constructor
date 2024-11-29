@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
+using SalesScriptConstructor.Domain.Interfaces.IBlocks;
 
 namespace TestControllers.TestBlocks 
 { 
@@ -12,66 +12,63 @@ namespace TestControllers.TestBlocks
 [TestClass]
     public class GetBlock
     {
-        private Mock<ILogger<SellersController>> _mockLogger;
-        private Mock<ISellersService> _mockSellersService;
-        private SellersController _controller;
+        private Mock<ILogger<BlocksController>> _mockLogger;
+        private Mock<IBlocksService> _mockBlocksService;
+        private BlocksController _controller;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockSellersService = new Mock<ISellersService>();
-            _mockLogger = new Mock<ILogger<SellersController>>();
-            _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+            _mockBlocksService = new Mock<IBlocksService>();
+            _mockLogger = new Mock<ILogger<BlocksController>>();
+            _controller = new BlocksController(_mockBlocksService.Object, _mockLogger.Object);
         }
 
         [TestMethod]
         public async Task Success()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var seller = new Seller { Id = Guid.NewGuid(), Name = "string"};
-            _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).ReturnsAsync(seller);
+            var block = new Block { Id = 1 };
+            _mockBlocksService.Setup(s => s.GetBlockByIdAsync(block.Id)).ReturnsAsync(block);
 
             //Act
-            var result = await _controller.GetSeller(id);
+            var result = await _controller.GetBlock(block.Id);
 
             //Accert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<OkObjectResult>(result);
             var objectResult = result as OkObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-            Assert.AreEqual(seller, objectResult.Value);
+            Assert.AreEqual(block, objectResult.Value);
         }
 
         [TestMethod]
         public async Task NotFound()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-            _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new ArgumentNullException());
+            var block = new Block { Id = 1 };
+            _mockBlocksService.Setup(s => s.GetBlockByIdAsync(block.Id)).Throws(new ArgumentNullException());
 
             //Act
-            var result = await _controller.GetSeller(id);
+            var result = await _controller.GetBlock(block.Id);
 
             //Accert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<NotFoundObjectResult>(result);
             var objectResult = result as NotFoundObjectResult;
             Assert.AreEqual(StatusCodes.Status404NotFound, objectResult.StatusCode);
-            Assert.AreEqual("Продавца с таким Id не существует", objectResult.Value);
+            Assert.AreEqual("Блок с данным id не найден", objectResult.Value);
         }
 
         [TestMethod]
         public async Task Fatal()
         {
             //Arrange
-            var id = Guid.NewGuid();
-            var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-            _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new Exception());
+            var block = new Block { Id = 1 };
+            _mockBlocksService.Setup(s => s.GetBlockByIdAsync(block.Id)).Throws(new Exception());
 
             //Act
-            var result = await _controller.GetSeller(id);
+            var result = await _controller.GetBlock(block.Id);
 
             //Accert
             Assert.IsNotNull(result);

@@ -9,52 +9,52 @@ using SalesScriptConstructor.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using SalesScriptConstructor.Domain.Interfaces.IBlocks;
 
 namespace TestControllers.TestBlocks
 {
     [TestClass]
     public sealed class GetBlocks
     {
-        private Mock<ILogger<SellersController>> _mockLogger;
-        private Mock<ISellersService> _mockSellersService;
-        private SellersController _controller;
+        private Mock<ILogger<BlocksController>> _mockLogger;
+        private Mock<IBlocksService> _mockBlocksService;
+        private BlocksController _controller;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockSellersService = new Mock<ISellersService>();
-            _mockLogger = new Mock<ILogger<SellersController>>();
-            _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+            _mockBlocksService = new Mock<IBlocksService>();
+            _mockLogger = new Mock<ILogger<BlocksController>>();
+            _controller = new BlocksController(_mockBlocksService.Object, _mockLogger.Object);
         }
-
         [TestMethod]
         public async Task Success()
         {
             //Arrange
-            var managerId = Guid.NewGuid();
-            var sellers = new List<Seller> { new Seller { Id = Guid.NewGuid(), Name = "string" } };
-            _mockSellersService.Setup(s => s.GetSellersByManagerId(managerId)).ReturnsAsync(sellers);
+            int ScriptId = 1;
+            var blocks = new List<Block> { new Block { Id = 1, ScriptId = ScriptId } };
+            _mockBlocksService.Setup(s => s.GetBlocksByScriptIdAsync(ScriptId)).ReturnsAsync(blocks);
 
             //Act
-            var result = await _controller.GetLinkedSellers(managerId);
+            var result = await _controller.GetBlocks(ScriptId);
 
             //Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<OkObjectResult>(result);
             var objectResult = result as OkObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-            Assert.AreEqual(sellers,objectResult.Value);
+            Assert.AreEqual(blocks,objectResult.Value);
         }
 
         [TestMethod]
         public async Task Fatal() 
         {
             //Arrange
-            var managerId = Guid.NewGuid();
-            _mockSellersService.Setup(s => s.GetSellersByManagerId(managerId)).ThrowsAsync(new Exception());
+            int ScriptId = 1;
+            _mockBlocksService.Setup(s => s.GetBlocksByScriptIdAsync(ScriptId)).ThrowsAsync(new Exception());
 
             //Act
-            var result = await _controller.GetLinkedSellers(managerId);
+            var result = await _controller.GetBlocks(ScriptId);
 
             //Assert
             Assert.IsNotNull(result);

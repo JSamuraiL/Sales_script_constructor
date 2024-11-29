@@ -40,16 +40,17 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("manager/{ScriptId}")]
-        public async Task<IEnumerable<Block>> GetBlocks(int ScriptId) 
+        public async Task<IActionResult> GetBlocks(int ScriptId) 
         {
             try 
             { 
-                return await _blocksService.GetBlocksByScriptIdAsync(ScriptId);
+                var blocks = await _blocksService.GetBlocksByScriptIdAsync(ScriptId);
+                return Ok(blocks);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in SomeAction.");
-                return (IEnumerable<Block>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 

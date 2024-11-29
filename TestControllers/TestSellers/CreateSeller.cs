@@ -7,7 +7,7 @@ using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
-namespace TestControllers;
+namespace TestControllers.TestSellers;
 
 [TestClass]
 public class CreateBlockConnection

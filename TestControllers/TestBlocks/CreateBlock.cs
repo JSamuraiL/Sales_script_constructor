@@ -5,33 +5,34 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
+using SalesScriptConstructor.Domain.Interfaces.IBlocks;
 
 namespace TestControllers.TestBlocks;
 
 [TestClass]
 public class CreateBlock
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<BlocksController>> _mockLogger;
+    private Mock<IBlocksService> _mockBlocksService;
+    private BlocksController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockBlocksService = new Mock<IBlocksService>();
+        _mockLogger = new Mock<ILogger<BlocksController>>();
+        _controller = new BlocksController(_mockBlocksService.Object, _mockLogger.Object);
     }
+
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var seller = new Seller {Id = Guid.NewGuid(), Name = "string"};
-        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).Returns(Task.CompletedTask);
+        var block = new Block { Id = 1 };
+        _mockBlocksService.Setup(s => s.AddBlockAsync(block)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.CreateSeller(seller);
+        var result = await _controller.CreateBlock(block);
 
         //Assert
         Assert.IsNotNull(result);
@@ -44,12 +45,12 @@ public class CreateBlock
     public async Task IsExist()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).ThrowsAsync(new DbUpdateException());
-        _mockSellersService.Setup(s => s.SellerExists(seller.Id)).Returns(true);
+        var block = new Block { Id = 1 };
+        _mockBlocksService.Setup(s => s.AddBlockAsync(block)).ThrowsAsync(new DbUpdateException());
+        _mockBlocksService.Setup(s => s.BlockExists(block.Id)).Returns(true);
 
         //Act
-        var result = await _controller.CreateSeller(seller);
+        var result = await _controller.CreateBlock(block);
 
         //Assert
         Assert.IsNotNull(result);
@@ -62,11 +63,11 @@ public class CreateBlock
     public async Task Fatal()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).ThrowsAsync(new Exception());
+        var block = new Block { Id = 1 };
+        _mockBlocksService.Setup(s => s.AddBlockAsync(block)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.CreateSeller(seller);
+        var result = await _controller.CreateBlock(block);
 
         //Assert
         Assert.IsNotNull(result);
