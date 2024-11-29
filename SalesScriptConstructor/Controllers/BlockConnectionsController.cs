@@ -19,11 +19,12 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlockConnection>> GetBlockConnection(int id) 
+        public async Task<IActionResult> GetBlockConnection(int id) 
         {
             try
             {
-                return await _blockConnectionsService.GetBlockConnectionByIdAsync(id);
+                var blockConnections = await _blockConnectionsService.GetBlockConnectionByIdAsync(id);
+                return Ok(blockConnections);
             }
             catch (ArgumentNullException ex) 
             {
@@ -37,8 +38,8 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<BlockConnection>> CreateBlockConnection (BlockConnection blockConnection) 
+        [HttpPost]
+        public async Task<IActionResult> CreateBlockConnection (BlockConnection blockConnection) 
         {
             try 
             {
@@ -61,8 +62,8 @@ namespace SalesScriptConstructor.API.Controllers
             return CreatedAtAction("GetBlockConnection", new { id = blockConnection.Id }, blockConnection);
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<BlockConnection>> DeleteBlockConnection(int id) 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBlockConnection(int id) 
         {
             try 
             { 

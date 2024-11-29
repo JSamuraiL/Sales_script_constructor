@@ -11,34 +11,36 @@ namespace SalesScriptConstructor.API.Controllers
     public class SellersController : ControllerBase
     {
         private readonly ISellersService _sellersService;
-        private readonly ILogger<BlockConnectionsController> _logger;
+        private readonly ILogger<SellersController> _logger;
 
-        public SellersController (ISellersService sellersService, ILogger<BlockConnectionsController> logger)
+        public SellersController (ISellersService sellersService, ILogger<SellersController> logger)
         {
             _sellersService = sellersService;
             _logger = logger;
         }
 
         [HttpGet("manager/{ManagerId}")]
-        public async Task<IEnumerable<Seller>> GetLinkedSellers(Guid ManagerId) 
+        public async Task<IActionResult> GetLinkedSellers(Guid ManagerId)
         {
-            try 
-            { 
-                return await _sellersService.GetSellersByManagerId(ManagerId);
+            try
+            {
+                var sellers = await _sellersService.GetSellersByManagerId(ManagerId);
+                return Ok(sellers);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in SomeAction.");
-                return (IEnumerable<Seller>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Seller>> GetSeller(Guid id)
+        public async Task<IActionResult> GetSeller(Guid id)
         {
             try 
-            { 
-                return await _sellersService.GetSellerByIdAsync(id); 
+            {
+                var seller = await _sellersService.GetSellerByIdAsync(id); 
+                return Ok(seller);
             }
             catch (ArgumentNullException ex) 
             {
@@ -52,8 +54,8 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<Seller>> CreateSeller(Seller seller) 
+        [HttpPost]
+        public async Task<IActionResult> CreateSeller(Seller seller) 
         {
             try
             {
@@ -80,7 +82,7 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Seller>> DeleteSeller(Guid id) 
+        public async Task<IActionResult> DeleteSeller(Guid id) 
         {
             try
             {
@@ -99,8 +101,8 @@ namespace SalesScriptConstructor.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Seller>> UpdateSeller(Seller seller) 
+        [HttpPut]
+        public async Task<IActionResult> UpdateSeller(Seller seller) 
         {
             try
             {

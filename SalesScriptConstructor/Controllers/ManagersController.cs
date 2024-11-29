@@ -10,9 +10,9 @@ namespace SalesScriptConstructor.API.Controllers
     public class ManagersController : ControllerBase
     {
         private readonly IManagersService _managersService;
-        private readonly ILogger<BlockConnectionsController> _logger;
+        private readonly ILogger<ManagersController> _logger;
 
-        public ManagersController(IManagersService managersService, ILogger<BlockConnectionsController> logger)
+        public ManagersController(IManagersService managersService, ILogger<ManagersController> logger)
         {
             _managersService = managersService;
             _logger = logger;
@@ -20,11 +20,12 @@ namespace SalesScriptConstructor.API.Controllers
 
         // GET: api/Managers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Manager>> GetManager(Guid id)
+        public async Task<IActionResult> GetManager(Guid id)
         {
             try
             {
-                return await _managersService.GetManagerByIdAsync(id);
+                var manager = await _managersService.GetManagerByIdAsync(id);
+                return Ok(manager);
             }
             catch (ArgumentNullException ex) 
             {
@@ -40,7 +41,7 @@ namespace SalesScriptConstructor.API.Controllers
         
         // PUT: api/Managers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> ChangeManagerDetails(Manager manager)
         {
             try
@@ -68,7 +69,7 @@ namespace SalesScriptConstructor.API.Controllers
         // POST: api/Managers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Manager>> PostManager(Manager manager)
+        public async Task<IActionResult> PostManager(Manager manager)
         {
             try
             {
