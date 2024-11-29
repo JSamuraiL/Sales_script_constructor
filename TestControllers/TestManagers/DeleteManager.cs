@@ -4,23 +4,23 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
+using SalesScriptConstructor.Domain.Interfaces.IManagers;
 
 namespace TestControllers.TestManagers;
 
 [TestClass]
 public class DeleteBlockConnection
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<ManagersController>> _mockLogger;
+    private Mock<IManagersService> _mockManagersService;
+    private ManagersController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockManagersService = new Mock<IManagersService>();
+        _mockLogger = new Mock<ILogger<ManagersController>>();
+        _controller = new ManagersController(_mockManagersService.Object, _mockLogger.Object);
     }
 
     [TestMethod]
@@ -28,10 +28,10 @@ public class DeleteBlockConnection
     {
         //Arrange
         var id = Guid.NewGuid();
-        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).Returns(Task.CompletedTask);
+        _mockManagersService.Setup(s => s.DeleteManagerAsync(id)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.DeleteSeller(id);
+        var result = await _controller.DeleteManager(id);
 
         //Assert
         Assert.IsNotNull(result);
@@ -45,10 +45,10 @@ public class DeleteBlockConnection
     {
         //Arrange
         var id = Guid.NewGuid();
-        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).ThrowsAsync(new ArgumentNullException());
+        _mockManagersService.Setup(s => s.DeleteManagerAsync(id)).ThrowsAsync(new ArgumentNullException());
 
         //Act
-        var result = await _controller.DeleteSeller(id);
+        var result = await _controller.DeleteManager(id);
 
         //Assert
         Assert.IsNotNull(result);
@@ -62,10 +62,10 @@ public class DeleteBlockConnection
     {
         //Arrange
         var id = Guid.NewGuid();
-        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).ThrowsAsync(new Exception());
+        _mockManagersService.Setup(s => s.DeleteManagerAsync(id)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.DeleteSeller(id);
+        var result = await _controller.DeleteManager(id);
 
         //Assert
         Assert.IsNotNull(result);

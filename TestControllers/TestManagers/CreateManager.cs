@@ -5,33 +5,34 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
+using SalesScriptConstructor.Domain.Interfaces.IManagers;
 
 namespace TestControllers.TestManagers;
 
 [TestClass]
 public class CreateBlockConnection
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<ManagersController>> _mockLogger;
+    private Mock<IManagersService> _mockManagersService;
+    private ManagersController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockManagersService = new Mock<IManagersService>();
+        _mockLogger = new Mock<ILogger<ManagersController>>();
+        _controller = new ManagersController(_mockManagersService.Object, _mockLogger.Object);
     }
+
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var seller = new Seller {Id = Guid.NewGuid(), Name = "string"};
-        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).Returns(Task.CompletedTask);
+        var manager = new Manager {Id = Guid.NewGuid(), Name = "string"};
+        _mockManagersService.Setup(s => s.AddManagerAsync(manager)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.CreateSeller(seller);
+        var result = await _controller.PostManager(manager);
 
         //Assert
         Assert.IsNotNull(result);
@@ -44,12 +45,12 @@ public class CreateBlockConnection
     public async Task IsExist()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).ThrowsAsync(new DbUpdateException());
-        _mockSellersService.Setup(s => s.SellerExists(seller.Id)).Returns(true);
+        var manager = new Manager { Id = Guid.NewGuid(), Name = "string" };
+        _mockManagersService.Setup(s => s.AddManagerAsync(manager)).ThrowsAsync(new DbUpdateException());
+        _mockManagersService.Setup(s => s.ManagerExists(manager.Id)).Returns(true);
 
         //Act
-        var result = await _controller.CreateSeller(seller);
+        var result = await _controller.PostManager(manager);
 
         //Assert
         Assert.IsNotNull(result);
@@ -62,11 +63,11 @@ public class CreateBlockConnection
     public async Task Fatal()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).ThrowsAsync(new Exception());
+        var manager = new Manager { Id = Guid.NewGuid(), Name = "string" };
+        _mockManagersService.Setup(s => s.AddManagerAsync(manager)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.CreateSeller(seller);
+        var result = await _controller.PostManager(manager);
 
         //Assert
         Assert.IsNotNull(result);
