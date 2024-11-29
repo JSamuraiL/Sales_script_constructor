@@ -20,11 +20,12 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Script>> GetScript(int id)
+        public async Task<IActionResult> GetScript(int id)
         {
             try
             {
-                return await _scriptsService.GetScriptByIdAsync(id);
+                var script = await _scriptsService.GetScriptByIdAsync(id);
+                return Ok(script);
             }
             catch (ArgumentNullException ex)
             {
@@ -39,20 +40,22 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("manager/{ManagerId}")]
-        public async Task<IEnumerable<Script>> GetLinkedScripts(Guid ManagerId) 
+        public async Task<IActionResult> GetLinkedScripts(Guid ManagerId) 
         {
-            try { 
-                return await _scriptsService.GetScriptsByManagerIdAsync(ManagerId);
+            try 
+            { 
+                var scripts = await _scriptsService.GetScriptsByManagerIdAsync(ManagerId);
+                return Ok(scripts);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in SomeAction.");
-                return (IEnumerable<Script>)StatusCode(500, "Неизвестная ошибка, уже исправляем");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<Script>> CreateScript(Script script) 
+        [HttpPost]
+        public async Task<IActionResult> CreateScript(Script script) 
         {
             try 
             {
@@ -76,7 +79,7 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Script>> DeleteScript(int id) 
+        public async Task<IActionResult> DeleteScript(int id) 
         {
             try
             {
@@ -95,8 +98,8 @@ namespace SalesScriptConstructor.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Script>> UpdateScript(Script script) 
+        [HttpPut]
+        public async Task<IActionResult> UpdateScript(Script script) 
         {
             try
             {

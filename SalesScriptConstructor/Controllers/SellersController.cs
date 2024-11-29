@@ -54,8 +54,8 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<Seller>> CreateSeller(Seller seller) 
+        [HttpPost]
+        public async Task<IActionResult> CreateSeller(Seller seller) 
         {
             try
             {
@@ -82,7 +82,7 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Seller>> DeleteSeller(Guid id) 
+        public async Task<IActionResult> DeleteSeller(Guid id) 
         {
             try
             {
@@ -101,8 +101,8 @@ namespace SalesScriptConstructor.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Seller>> UpdateSeller(Seller seller) 
+        [HttpPut]
+        public async Task<IActionResult> UpdateSeller(Seller seller) 
         {
             try
             {

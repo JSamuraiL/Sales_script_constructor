@@ -20,11 +20,12 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Block>> GetBlock(int id) 
+        public async Task<IActionResult> GetBlock(int id) 
         {
             try 
-            { 
-                return await _blocksService.GetBlockByIdAsync(id);
+            {
+                var block = await _blocksService.GetBlockByIdAsync(id);
+                return Ok(block);   
             }
             catch (ArgumentNullException ex) 
             {
@@ -52,8 +53,8 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<Block>> CreateBlock (Block block) 
+        [HttpPost]
+        public async Task<IActionResult> CreateBlock (Block block) 
         {
             try
             {
@@ -76,8 +77,8 @@ namespace SalesScriptConstructor.API.Controllers
             return CreatedAtAction("GetBlock", new { id = block.Id }, block);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Block>> ChangeBlock (Block block) 
+        [HttpPut]
+        public async Task<IActionResult> ChangeBlock (Block block) 
         {
             try
             {
@@ -96,7 +97,7 @@ namespace SalesScriptConstructor.API.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Block>> DeleteBlock(int id) 
+        public async Task<IActionResult> DeleteBlock(int id) 
         {
             try 
             {
