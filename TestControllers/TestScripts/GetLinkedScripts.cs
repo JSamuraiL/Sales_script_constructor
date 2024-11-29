@@ -2,29 +2,29 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Interfaces;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using SalesScriptConstructor.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using SalesScriptConstructor.Domain.Interfaces.IScripts;
 
 namespace TestControllers.TestScripts
 {
     [TestClass]
     public sealed class GetBlocks
     {
-        private Mock<ILogger<SellersController>> _mockLogger;
-        private Mock<ISellersService> _mockSellersService;
-        private SellersController _controller;
+        private Mock<ILogger<ScriptsController>> _mockLogger;
+        private Mock<IScriptsService> _mockScriptsService;
+        private ScriptsController _controller;
 
         [TestInitialize]
         public void Setup()
         {
-            _mockSellersService = new Mock<ISellersService>();
-            _mockLogger = new Mock<ILogger<SellersController>>();
-            _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+            _mockScriptsService = new Mock<IScriptsService>();
+            _mockLogger = new Mock<ILogger<ScriptsController>>();
+            _controller = new ScriptsController(_mockScriptsService.Object, _mockLogger.Object);
         }
 
         [TestMethod]
@@ -32,18 +32,18 @@ namespace TestControllers.TestScripts
         {
             //Arrange
             var managerId = Guid.NewGuid();
-            var sellers = new List<Seller> { new Seller { Id = Guid.NewGuid(), Name = "string" } };
-            _mockSellersService.Setup(s => s.GetSellersByManagerId(managerId)).ReturnsAsync(sellers);
+            var scripts = new List<Script> { new Script { Id = 1} };
+            _mockScriptsService.Setup(s => s.GetScriptsByManagerIdAsync(managerId)).ReturnsAsync(scripts);
 
             //Act
-            var result = await _controller.GetLinkedSellers(managerId);
+            var result = await _controller.GetLinkedScripts(managerId);
 
             //Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType<OkObjectResult>(result);
             var objectResult = result as OkObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-            Assert.AreEqual(sellers,objectResult.Value);
+            Assert.AreEqual(scripts,objectResult.Value);
         }
 
         [TestMethod]
@@ -51,10 +51,10 @@ namespace TestControllers.TestScripts
         {
             //Arrange
             var managerId = Guid.NewGuid();
-            _mockSellersService.Setup(s => s.GetSellersByManagerId(managerId)).ThrowsAsync(new Exception());
+            _mockScriptsService.Setup(s => s.GetScriptsByManagerIdAsync(managerId)).ThrowsAsync(new Exception());
 
             //Act
-            var result = await _controller.GetLinkedSellers(managerId);
+            var result = await _controller.GetLinkedScripts(managerId);
 
             //Assert
             Assert.IsNotNull(result);

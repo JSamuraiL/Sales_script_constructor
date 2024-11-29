@@ -4,73 +4,70 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
+using SalesScriptConstructor.Domain.Interfaces.IScripts;
 
 namespace TestControllers.TestScripts;
 
 [TestClass]
 public class GetBlockConnection
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<ScriptsController>> _mockLogger;
+    private Mock<IScriptsService> _mockScriptsService;
+    private ScriptsController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockScriptsService = new Mock<IScriptsService>();
+        _mockLogger = new Mock<ILogger<ScriptsController>>();
+        _controller = new ScriptsController(_mockScriptsService.Object, _mockLogger.Object);
     }
 
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string"};
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).ReturnsAsync(seller);
+        var script = new Script { Id = 1 };
+        _mockScriptsService.Setup(s => s.GetScriptByIdAsync(script.Id)).ReturnsAsync(script);
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.GetScript(script.Id);
 
         //Accert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<OkObjectResult>(result);
         var objectResult = result as OkObjectResult;
         Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-        Assert.AreEqual(seller, objectResult.Value);
+        Assert.AreEqual(script, objectResult.Value);
     }
 
     [TestMethod]
     public async Task NotFound()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new ArgumentNullException());
+        var script = new Script { Id = 1 };
+        _mockScriptsService.Setup(s => s.GetScriptByIdAsync(script.Id)).Throws(new ArgumentNullException());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.GetScript(script.Id);
 
         //Accert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<NotFoundObjectResult>(result);
         var objectResult = result as NotFoundObjectResult;
         Assert.AreEqual(StatusCodes.Status404NotFound, objectResult.StatusCode);
-        Assert.AreEqual("Продавца с таким Id не существует", objectResult.Value);
+        Assert.AreEqual("Скрипт с таким Id не существует", objectResult.Value);
     }
 
     [TestMethod]
     public async Task Fatal()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new Exception());
+        var script = new Script { Id = 1 };
+        _mockScriptsService.Setup(s => s.GetScriptByIdAsync(script.Id)).Throws(new Exception());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.GetScript(script.Id);
 
         //Accert
         Assert.IsNotNull(result);

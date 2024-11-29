@@ -4,34 +4,34 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
-using SalesScriptConstructor.Domain.Interfaces.ISellers;
+using SalesScriptConstructor.Domain.Interfaces.IScripts;
 
 namespace TestControllers.TestScripts;
 
 [TestClass]
 public class ChangeBlock
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<ScriptsController>> _mockLogger;
+    private Mock<IScriptsService> _mockScriptsService;
+    private ScriptsController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockScriptsService = new Mock<IScriptsService>();
+        _mockLogger = new Mock<ILogger<ScriptsController>>();
+        _controller = new ScriptsController(_mockScriptsService.Object, _mockLogger.Object);
     }
 
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.UpdateSellerAsync(seller)).Returns(Task.CompletedTask);
+        var script = new Script { Id = 1 };
+        _mockScriptsService.Setup(s => s.UpdateScriptAsync(script)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.UpdateSeller(seller);
+        var result = await _controller.UpdateScript(script);
 
         //Assert
         Assert.IsNotNull(result);
@@ -44,11 +44,11 @@ public class ChangeBlock
     public async Task NotFound()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.UpdateSellerAsync(seller)).ThrowsAsync(new ArgumentNullException());
+        var script = new Script { Id = 1 };
+        _mockScriptsService.Setup(s => s.UpdateScriptAsync(script)).ThrowsAsync(new ArgumentNullException());
 
         //Act
-        var result = await _controller.UpdateSeller(seller);
+        var result = await _controller.UpdateScript(script);
 
         //Assert
         Assert.IsNotNull(result);
@@ -61,11 +61,11 @@ public class ChangeBlock
     public async Task Fatal()
     {
         //Arrange
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.UpdateSellerAsync(seller)).ThrowsAsync(new Exception());
+        var script = new Script { Id = 1 };
+        _mockScriptsService.Setup(s => s.UpdateScriptAsync(script)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.UpdateSeller(seller);
+        var result = await _controller.UpdateScript(script);
 
         //Assert
         Assert.IsNotNull(result);
