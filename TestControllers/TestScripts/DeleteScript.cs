@@ -6,10 +6,10 @@ using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
-namespace TestControllers;
+namespace TestControllers.TestScripts;
 
 [TestClass]
-public class GetBlockConnection
+public class DeleteBlockConnection
 {
     private Mock<ILogger<SellersController>> _mockLogger;
     private Mock<ISellersService> _mockSellersService;
@@ -28,18 +28,16 @@ public class GetBlockConnection
     {
         //Arrange
         var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string"};
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).ReturnsAsync(seller);
+        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.DeleteSeller(id);
 
-        //Accert
+        //Assert
         Assert.IsNotNull(result);
-        Assert.IsInstanceOfType<OkObjectResult>(result);
-        var objectResult = result as OkObjectResult;
-        Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-        Assert.AreEqual(seller, objectResult.Value);
+        Assert.IsInstanceOfType<NoContentResult>(result);
+        var objectResult = result as NoContentResult;
+        Assert.AreEqual(StatusCodes.Status204NoContent, objectResult.StatusCode);
     }
 
     [TestMethod]
@@ -47,18 +45,16 @@ public class GetBlockConnection
     {
         //Arrange
         var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new ArgumentNullException());
+        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).ThrowsAsync(new ArgumentNullException());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.DeleteSeller(id);
 
-        //Accert
+        //Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<NotFoundObjectResult>(result);
         var objectResult = result as NotFoundObjectResult;
         Assert.AreEqual(StatusCodes.Status404NotFound, objectResult.StatusCode);
-        Assert.AreEqual("Продавца с таким Id не существует", objectResult.Value);
     }
 
     [TestMethod]
@@ -66,13 +62,12 @@ public class GetBlockConnection
     {
         //Arrange
         var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new Exception());
+        _mockSellersService.Setup(s => s.DeleteSellerAsync(id)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.DeleteSeller(id);
 
-        //Accert
+        //Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<ObjectResult>(result);
         var objectResult = result as ObjectResult;

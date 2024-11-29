@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 
-namespace TestControllers.TestSellers
+namespace TestControllers.TestBlocks
 {
     [TestClass]
     public sealed class GetBlocks

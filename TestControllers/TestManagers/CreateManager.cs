@@ -1,15 +1,16 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
-namespace TestControllers;
+namespace TestControllers.TestManagers;
 
 [TestClass]
-public class GetBlockConnection
+public class CreateBlockConnection
 {
     private Mock<ILogger<SellersController>> _mockLogger;
     private Mock<ISellersService> _mockSellersService;
@@ -22,57 +23,52 @@ public class GetBlockConnection
         _mockLogger = new Mock<ILogger<SellersController>>();
         _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
     }
-
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string"};
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).ReturnsAsync(seller);
+        var seller = new Seller {Id = Guid.NewGuid(), Name = "string"};
+        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).Returns(Task.CompletedTask);
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.CreateSeller(seller);
 
-        //Accert
+        //Assert
         Assert.IsNotNull(result);
-        Assert.IsInstanceOfType<OkObjectResult>(result);
-        var objectResult = result as OkObjectResult;
-        Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-        Assert.AreEqual(seller, objectResult.Value);
+        Assert.IsInstanceOfType<ObjectResult>(result);
+        var objectResult = result as ObjectResult;
+        Assert.AreEqual(StatusCodes.Status201Created, objectResult.StatusCode);
     }
 
     [TestMethod]
-    public async Task NotFound()
+    public async Task IsExist()
     {
         //Arrange
-        var id = Guid.NewGuid();
         var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new ArgumentNullException());
+        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).ThrowsAsync(new DbUpdateException());
+        _mockSellersService.Setup(s => s.SellerExists(seller.Id)).Returns(true);
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.CreateSeller(seller);
 
-        //Accert
+        //Assert
         Assert.IsNotNull(result);
-        Assert.IsInstanceOfType<NotFoundObjectResult>(result);
-        var objectResult = result as NotFoundObjectResult;
-        Assert.AreEqual(StatusCodes.Status404NotFound, objectResult.StatusCode);
-        Assert.AreEqual("Продавца с таким Id не существует", objectResult.Value);
+        Assert.IsInstanceOfType<BadRequestObjectResult>(result);
+        var objectResult = result as BadRequestObjectResult;
+        Assert.AreEqual(StatusCodes.Status400BadRequest, objectResult.StatusCode);
     }
 
     [TestMethod]
     public async Task Fatal()
     {
         //Arrange
-        var id = Guid.NewGuid();
         var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new Exception());
+        _mockSellersService.Setup(s => s.AddSellerAsync(seller)).ThrowsAsync(new Exception());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.CreateSeller(seller);
 
-        //Accert
+        //Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<ObjectResult>(result);
         var objectResult = result as ObjectResult;

@@ -4,54 +4,55 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SalesScriptConstructor.API.Controllers;
 using SalesScriptConstructor.Domain.Entities;
+using SalesScriptConstructor.Domain.Interfaces.IBlockConnections;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 
-namespace TestControllers;
+namespace TestControllers.TestBlockConnections;
 
 [TestClass]
 public class GetBlockConnection
 {
-    private Mock<ILogger<SellersController>> _mockLogger;
-    private Mock<ISellersService> _mockSellersService;
-    private SellersController _controller;
+    private Mock<ILogger<BlockConnectionsController>> _mockLogger;
+    private Mock<IBlockConnectionsService> _mockBlockConnectionsService;
+    private BlockConnectionsController _controller;
 
     [TestInitialize]
     public void Setup()
     {
-        _mockSellersService = new Mock<ISellersService>();
-        _mockLogger = new Mock<ILogger<SellersController>>();
-        _controller = new SellersController(_mockSellersService.Object, _mockLogger.Object);
+        _mockBlockConnectionsService = new Mock<IBlockConnectionsService>();
+        _mockLogger = new Mock<ILogger<BlockConnectionsController>>();
+        _controller = new BlockConnectionsController(_mockBlockConnectionsService.Object, _mockLogger.Object);
     }
 
     [TestMethod]
     public async Task Success()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string"};
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).ReturnsAsync(seller);
+        var id = new int();
+        var blockConnection = new BlockConnection { Id = id};
+        _mockBlockConnectionsService.Setup(s => s.GetBlockConnectionByIdAsync(id)).ReturnsAsync(blockConnection);
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.GetBlockConnection(id);
 
         //Accert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<OkObjectResult>(result);
         var objectResult = result as OkObjectResult;
         Assert.AreEqual(StatusCodes.Status200OK, objectResult.StatusCode);
-        Assert.AreEqual(seller, objectResult.Value);
+        Assert.AreEqual(blockConnection, objectResult.Value);
     }
 
     [TestMethod]
     public async Task NotFound()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new ArgumentNullException());
+        var id = new int();
+        var blockConnection = new BlockConnection { Id = id };
+        _mockBlockConnectionsService.Setup(s => s.GetBlockConnectionByIdAsync(id)).Throws(new ArgumentNullException());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.GetBlockConnection(id);
 
         //Accert
         Assert.IsNotNull(result);
@@ -65,12 +66,12 @@ public class GetBlockConnection
     public async Task Fatal()
     {
         //Arrange
-        var id = Guid.NewGuid();
-        var seller = new Seller { Id = Guid.NewGuid(), Name = "string" };
-        _mockSellersService.Setup(s => s.GetSellerByIdAsync(id)).Throws(new Exception());
+        var id = new int();
+        var blockConnection = new BlockConnection { Id = id };
+        _mockBlockConnectionsService.Setup(s => s.GetBlockConnectionByIdAsync(id)).Throws(new Exception());
 
         //Act
-        var result = await _controller.GetSeller(id);
+        var result = await _controller.GetBlockConnection(id);
 
         //Accert
         Assert.IsNotNull(result);

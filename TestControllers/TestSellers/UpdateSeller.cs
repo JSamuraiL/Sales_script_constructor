@@ -9,7 +9,7 @@ using SalesScriptConstructor.Domain.Interfaces.ISellers;
 namespace TestControllers;
 
 [TestClass]
-public class UpdateSeller
+public class ChangeBlock
 {
     private Mock<ILogger<SellersController>> _mockLogger;
     private Mock<ISellersService> _mockSellersService;
