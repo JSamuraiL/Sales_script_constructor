@@ -13,6 +13,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalesScriptConstructor.Infrastructure", "..\Infrastructure\SalesScriptConstructor.Infrastructure.csproj", "{777B6C4F-5128-438A-A57D-299C040C7693}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scr", "scr", "{7F2A1600-255E-4292-901E-5253E781A4A2}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{09B9CEE5-85A4-4014-B1CC-F3AE3BF7EC88}"
 EndProject
