@@ -1,0 +1,28 @@
+name: CI-CD
+on:
+  push:
+    branches:
+    - master
+jobs:
+  build:
+    name: Checkout and build
+    runs-on: ubuntu-latest
+    steps:      
+      - 
+        name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Download & Update sudo
+        run: |
+            apt update && apt install sudo     
+            
+      - 
+        name: docker download
+        run: |
+          curl -sSL https://get.docker.com/ | sudo sh    
+    
+      - name: docker build
+        working-directory: .
+        run: |
+            ls -l
+            docker build . -t sales-script-constructor
