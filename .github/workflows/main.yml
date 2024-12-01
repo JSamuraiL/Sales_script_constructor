@@ -2,7 +2,8 @@ name: CI-CD
 
 on:
   push:
-
+    branches:
+      - master
 jobs:
   build:
     name: Checkout and build
