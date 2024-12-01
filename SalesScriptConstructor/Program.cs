@@ -12,7 +12,7 @@ using SalesScriptConstructor.Domain.Interfaces.IBlockConnections;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//Comment для запроса ci-cd
 // Add services to the container.
 Log.Logger = new LoggerConfiguration().MinimumLevel.Warning().WriteTo.Console()
     .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day).CreateLogger();
