@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.API.Controllers
         private readonly IBlockConnectionsService _blockConnectionsService;
         public BlockConnectionsController(IBlockConnectionsService blockConnectionsService)
         {
-            _blockConnectionsService = blockConnectionsService;
+            _blockConnectionsService = blockConnectionsService ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{id}")]

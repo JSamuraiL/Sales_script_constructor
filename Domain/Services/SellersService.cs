@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.Domain.Services
         private readonly ISellersRepository _sellersRepository;
         public SellersService(ISellersRepository sellersRepository) 
         {
-            _sellersRepository = sellersRepository;
+            _sellersRepository = sellersRepository ?? throw new ArgumentNullException();
         }
 
         public async Task AddSellerAsync(Seller seller)

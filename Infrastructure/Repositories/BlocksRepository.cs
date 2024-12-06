@@ -14,7 +14,7 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         private readonly PostgreDbContext _dbContext;
         public BlocksRepository(PostgreDbContext dbContext) 
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException();
         }
         public async Task AddBlockAsync(Block block)
         {

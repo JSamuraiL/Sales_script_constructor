@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.API.Controllers
         private readonly IBlocksService _blocksService;
         public BlocksController(IBlocksService blocksService) 
         {
-            _blocksService = blocksService;
+            _blocksService = blocksService ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{id}")]

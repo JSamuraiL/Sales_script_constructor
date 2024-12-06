@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.API.Controllers
         private readonly ISellersService _sellersService;
         public SellersController (ISellersService sellersService)
         {
-            _sellersService = sellersService;
+            _sellersService = sellersService ?? throw new ArgumentNullException();
         }
 
         [HttpGet("manager/{ManagerId}")]

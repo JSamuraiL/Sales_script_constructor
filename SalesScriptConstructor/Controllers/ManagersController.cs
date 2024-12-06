@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.API.Controllers
 
         public ManagersController(IManagersService managersService)
         {
-            _managersService = managersService;
+            _managersService = managersService ?? throw new ArgumentNullException();
         }
 
         // GET: api/Managers/5
