@@ -15,8 +15,8 @@ namespace SalesScriptConstructor.API.Controllers
 
         public ScriptsController(IScriptsService scriptsService, ILogger<ScriptsController> logger)
         {
-            _scriptsService = scriptsService;
-            _logger = logger;
+            _scriptsService = scriptsService ?? throw new ArgumentNullException();
+            _logger = logger ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{id}")]

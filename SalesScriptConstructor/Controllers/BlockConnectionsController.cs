@@ -14,7 +14,7 @@ namespace SalesScriptConstructor.API.Controllers
         private readonly IBlockConnectionsService _blockConnectionsService;
         public BlockConnectionsController(IBlockConnectionsService blockConnectionsService, ILogger<BlockConnectionsController> logger)
         {
-            _blockConnectionsService = blockConnectionsService;
+            _blockConnectionsService = blockConnectionsService ?? throw new ArgumentNullException();
             _logger = logger;
         }
 

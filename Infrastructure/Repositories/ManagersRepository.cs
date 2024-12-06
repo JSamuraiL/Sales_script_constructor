@@ -9,7 +9,7 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         private readonly PostgreDbContext _dbContext;
         public ManagersRepository(PostgreDbContext dbContext) 
         { 
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException();
         }
 
         public async Task AddManagerAsync(Manager manager)

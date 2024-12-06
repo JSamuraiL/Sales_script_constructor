@@ -9,7 +9,7 @@ namespace SalesScriptConstructor.Domain.Services
         private readonly IManagersRepository _managersRepository;
         public ManagersService(IManagersRepository managersRepository) 
         {
-            _managersRepository = managersRepository;        
+            _managersRepository = managersRepository ?? throw new ArgumentNullException();        
         }
 
         public async Task AddManagerAsync(Manager manager)

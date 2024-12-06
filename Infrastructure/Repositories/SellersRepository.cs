@@ -14,7 +14,7 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         private readonly PostgreDbContext _dbContext;
         public SellersRepository(PostgreDbContext dbContext) 
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException();
         }
 
         public async Task AddSellerAsync(Seller seller)

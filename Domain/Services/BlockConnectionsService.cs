@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.Domain.Services
         private readonly IBlockConnectionsRepository _blockConnectionsRepository;
         public BlockConnectionsService(IBlockConnectionsRepository blockConnectionsRepository)
         {
-            _blockConnectionsRepository = blockConnectionsRepository;
+            _blockConnectionsRepository = blockConnectionsRepository ?? throw new ArgumentNullException();
         }
 
         public async Task AddBlockConnectionAsync(BlockConnection blockConnection)

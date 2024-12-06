@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.Domain.Services
         private readonly IBlocksRepository _blocksRepository;
         public BlocksService(IBlocksRepository blocksRepository)
         {
-            _blocksRepository = blocksRepository;
+            _blocksRepository = blocksRepository ?? throw new ArgumentNullException();
         }
 
         public async Task AddBlockAsync(Block block)

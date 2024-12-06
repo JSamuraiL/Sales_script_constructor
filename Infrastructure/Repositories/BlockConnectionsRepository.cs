@@ -13,7 +13,7 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
         private readonly PostgreDbContext _dbContext;
         public BlockConnectionsRepository (PostgreDbContext dbContext) 
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException();
         }
         public async Task AddBlockConnectionAsync(BlockConnection blockConnection)
         {

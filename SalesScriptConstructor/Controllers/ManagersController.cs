@@ -14,8 +14,8 @@ namespace SalesScriptConstructor.API.Controllers
 
         public ManagersController(IManagersService managersService, ILogger<ManagersController> logger)
         {
-            _managersService = managersService;
-            _logger = logger;
+            _managersService = managersService ?? throw new ArgumentNullException();
+            _logger = logger ?? throw new ArgumentNullException();
         }
 
         // GET: api/Managers/5

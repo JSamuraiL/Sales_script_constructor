@@ -15,8 +15,8 @@ namespace SalesScriptConstructor.API.Controllers
 
         public BlocksController(IBlocksService blocksService, ILogger<BlocksController> logger) 
         {
-            _blocksService = blocksService;
-            _logger = logger;
+            _blocksService = blocksService ?? throw new ArgumentNullException();
+            _logger = logger ?? throw new ArgumentNullException();
         }
 
         [HttpGet("{id}")]
