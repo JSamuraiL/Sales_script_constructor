@@ -1,0 +1,60 @@
+<div style="height: 95vh;align-items: center;justify-content: center;display: flex;"> 
+    <p-card [style]="{width: '25rem',  margin: '0 auto'}">
+        <h2 class="text-align">Регистрация</h2>
+        <div class="indent item-align">
+            <p-floatlabel variant="on" >
+                <input pInputText id="surname" autocomplete="off"/>
+                <label for="surname">Фамилия</label>
+            </p-floatlabel>
+        </div>
+        <div class="indent item-align">
+            <p-floatlabel variant="on" >
+                <input pInputText id="name" autocomplete="off"/>
+                <label for="name">Имя</label>
+            </p-floatlabel>
+        </div>
+        <div class="indent item-align">
+            <p-floatlabel variant="on" >
+                <input pInputText id="patronymic" autocomplete="off"/>
+                <label for="patronymic">Отчество</label>
+            </p-floatlabel>
+        </div>
+        <div class="indent item-align">
+            <p-floatlabel variant="on" >
+                <input pInputText id="mail" autocomplete="off"/>
+                <label for="mail">Почта</label>
+            </p-floatlabel>
+        </div>
+        <div class="indent item-align">
+            <p-floatlabel variant="on" >
+                <p-password  inputId="password" promptLabel="Введите пароль" weakLabel="Слишком простой" 
+                mediumLabel="Достаточно сильный" strongLabel="Очень сильный" autocomplete="off">
+                    <ng-template #footer>
+                        <p-divider />
+                        <ul class="pl-2 ml-2 my-0 leading-normal">
+                            <li>Должен содержать строчные латинские буквы</li>
+                            <li>Должен содержать заглавные латинские буквы</li>
+                            <li>Хотя бы 1 число</li>
+                            <li>Минимум 8 символов</li>
+                        </ul>
+                    </ng-template>
+                </p-password>
+                <label for="password">Пароль</label>
+            </p-floatlabel>
+        </div>
+        <div class="indent item-align">
+            <p-floatlabel variant="on" >
+                <p-password inputId="confpassword" autocomplete="off" [feedback]="false" />
+                <label for="confpassword">Подтверждение пароля</label>
+            </p-floatlabel>
+        </div>
+        <ng-template #footer>  
+            <div>
+                <p-toast />
+                <p-button [style]="{width: '15rem'}" (onClick)="show()" label="Зарегистрироваться" class="indent item-align" />
+                <p class="indent item-align">Уже есть учетная запись?</p>
+                <a routerLink="/" class="item-align" style="margin-top: -10px;">Войти</a>
+            </div>  
+        </ng-template> 
+    </p-card>
+</div>
