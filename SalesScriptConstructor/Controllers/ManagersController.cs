@@ -40,12 +40,17 @@ namespace SalesScriptConstructor.API.Controllers
         }
 
         [HttpGet("byMail/{mail}")]
-        public async Task<IActionResult> GetManagerByMail(string mail)
+        public async Task<IActionResult> GetManagerByMail(string mail, string password)
         {
             try
             {
-                var manager = await _managersService.GetManagerByMailAsync(mail);
+                var manager = await _managersService.GetManagerByMailAsync(mail, password);
                 return Ok(manager);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                _logger.LogWarning(ex, "Warning in SomeAction");
+                return Conflict("Неверно введен пароль");
             }
             catch (ArgumentNullException ex)
             {

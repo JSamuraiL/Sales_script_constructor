@@ -28,8 +28,9 @@ namespace SalesScriptConstructor.Domain.Services
             return await _managersRepository.GetManagerByIdAsync(id)?? throw new ArgumentNullException();
         }
 
-        public async Task<Manager> GetManagerByMailAsync(string mail)
+        public async Task<Manager> GetManagerByMailAsync(string mail, string password)
         {
+            if (_managersRepository.GetManagerByMailAsync(mail).Result.HashedPassword != password) throw new ArgumentOutOfRangeException();
             return await _managersRepository.GetManagerByMailAsync(mail) ?? throw new ArgumentNullException();
         }
 
