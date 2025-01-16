@@ -84,7 +84,7 @@ export class RegistrationComponent {
 
   show() {
     if (this.checkNullInputs()) {
-      return; // Возвращаем, если поле пустое
+      return; 
     }
     if (this.mismatchPass()){
       return;
