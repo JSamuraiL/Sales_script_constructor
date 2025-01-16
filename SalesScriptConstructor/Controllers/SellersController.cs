@@ -54,7 +54,7 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
-        [HttpGet("byMail/{mail}")]
+        [HttpPost("byMail")]
         public async Task<IActionResult> GetSellerByMail(string mail, string password)
         {
             try

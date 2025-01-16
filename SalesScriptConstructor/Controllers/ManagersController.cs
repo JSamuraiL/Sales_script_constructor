@@ -39,7 +39,7 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
-        [HttpGet("byMail/{mail}")]
+        [HttpPost("byMail")]
         public async Task<IActionResult> GetManagerByMail(string mail, string password)
         {
             try
