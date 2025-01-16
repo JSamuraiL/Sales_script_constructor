@@ -34,6 +34,17 @@ builder.Services.AddTransient<IBlockConnectionsService, BlockConnectionsService>
 builder.Services.AddTransient<IBlockConnectionsRepository, BlockConnectionsRepository>();
 builder.Services.AddDbContext<PostgreDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Настройки для CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:4200")
+                          .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                          .WithHeaders("Content-Type", "Authorization")
+                          .SetPreflightMaxAge(TimeSpan.FromSeconds(2520)));
+});
+
 var app = builder.Build();
 
 
@@ -46,6 +57,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 
