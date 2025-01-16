@@ -3,20 +3,21 @@
         <h2 class="text-align">Вход</h2>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <input pInputText id="login" autocomplete="off"/>
-                <label for="login">Почта</label>
+                <input pInputText id="mail" autocomplete="off" [(ngModel)]="mail" (focus)="toNormal('mail')"/>
+                <label for="mail">Почта</label>
             </p-floatlabel>
         </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <p-password inputId="password" autocomplete="off" [feedback]="false" />
+                <p-password inputId="password" autocomplete="off" [feedback]="false" [(ngModel)]="password"
+                (onFocus)="toNormal('password')"/>
                 <label for="password">Пароль</label>
             </p-floatlabel>
         </div>
         <ng-template #footer>  
             <div>
                 <p-toast />
-                <p-button [style]="{width: '15rem'}" (onClick)="show()" label="Войти" class="indent item-align" />
+                <p-button [style]="{width: '15rem'}" (onClick)="enter()" label="Войти" class="indent item-align" />
                 <p class="indent item-align">Нет учетной записи?</p>
                 <a routerLink="/registration" class="item-align" style="margin-top: -10px;">Зарегистрироваться</a>
             </div>  

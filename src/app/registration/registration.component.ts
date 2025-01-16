@@ -66,8 +66,8 @@ export class RegistrationComponent {
     return false
   }
 
-  toNormal(string: string) {
-    const inputElement = document.getElementById(string)
+  toNormal(id: string) {
+    const inputElement = document.getElementById(id)
     if (inputElement) {
       inputElement.classList.remove("ng-invalid");
       inputElement.classList.remove("ng-dirty");
@@ -82,7 +82,7 @@ export class RegistrationComponent {
     return false;
   }
 
-  show() {
+  createUser() {
     if (this.checkNullInputs()) {
       return; 
     }
