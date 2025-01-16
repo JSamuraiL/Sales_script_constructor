@@ -74,10 +74,21 @@ export class RegistrationComponent {
     } 
   }
 
+  mismatchPass(){
+    if (this.password !== this.confpassword){
+      this.messageService.add({ severity: 'warn', summary: 'Упс', detail: 'Введенные пароли не совпадают', life: 3000 });
+      return true;
+    }
+    return false;
+  }
+
   show() {
     if (this.checkNullInputs()) {
       return; // Возвращаем, если поле пустое
-      }
+    }
+    if (this.mismatchPass()){
+      return;
+    }
       this.messageService.add({ severity: 'success', summary: 'Супер', detail: 'Регистрация выполнена успешно!', life: 3000 });
   }
 }
