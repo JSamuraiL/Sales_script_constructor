@@ -29,6 +29,11 @@ namespace SalesScriptConstructor.Infrastructure.Repositories
             return await _dbContext.Managers.FindAsync(id);
         }
 
+        public async Task<Manager> GetManagerByMailAsync(string mail)
+        {
+            return await _dbContext.Managers.Where(Manager => Manager.Mail == mail).FirstOrDefaultAsync();
+        }
+
         public bool ManagerExists(Guid id)
         {
             return _dbContext.Managers.Any(e => e.Id == id);

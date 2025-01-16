@@ -10,6 +10,7 @@ namespace SalesScriptConstructor.Domain.Interfaces.IManagers
     public interface IManagersRepository
     {
         Task<Manager> GetManagerByIdAsync(Guid id);
+        Task<Manager> GetManagerByMailAsync(string mail);
         Task AddManagerAsync(Manager manager);
         Task UpdateManagerAsync(Manager manager);
         Task DeleteManagerAsync(Guid id);

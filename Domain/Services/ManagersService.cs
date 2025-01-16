@@ -28,6 +28,11 @@ namespace SalesScriptConstructor.Domain.Services
             return await _managersRepository.GetManagerByIdAsync(id)?? throw new ArgumentNullException();
         }
 
+        public async Task<Manager> GetManagerByMailAsync(string mail)
+        {
+            return await _managersRepository.GetManagerByMailAsync(mail) ?? throw new ArgumentNullException();
+        }
+
         public bool ManagerExists(Guid id)
         {
             return _managersRepository.ManagerExists(id);

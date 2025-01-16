@@ -38,7 +38,27 @@ namespace SalesScriptConstructor.API.Controllers
                 return StatusCode(500, "Неизвестная ошибка, уже исправляем");
             }
         }
-        
+
+        [HttpGet("byMail/{mail}")]
+        public async Task<IActionResult> GetManagerByMail(string mail)
+        {
+            try
+            {
+                var manager = await _managersService.GetManagerByMailAsync(mail);
+                return Ok(manager);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogWarning(ex, "Warning in SomeAction");
+                return NotFound("Менеджера с такой почтой не существует");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
+            }
+        }
+
         // PUT: api/Managers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
