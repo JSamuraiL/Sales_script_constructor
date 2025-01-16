@@ -11,6 +11,7 @@ namespace SalesScriptConstructor.Domain.Interfaces.ISellers
     {
         Task <IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId);
         Task<Seller> GetSellerByIdAsync(Guid id);
+        Task<Seller> GetSellerByMailAsync(string mail);
         Task AddSellerAsync(Seller seller);
         Task UpdateSellerAsync(Seller seller);
         Task DeleteSellerAsync(Guid id);

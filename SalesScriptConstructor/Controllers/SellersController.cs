@@ -54,6 +54,31 @@ namespace SalesScriptConstructor.API.Controllers
             }
         }
 
+        [HttpGet("byMail/{mail}")]
+        public async Task<IActionResult> GetSellerByMail(string mail, string password)
+        {
+            try
+            {
+                var manager = await _sellersService.GetSellerByMailAsync(mail, password);
+                return Ok(manager);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                _logger.LogWarning(ex, "Warning in SomeAction");
+                return Conflict("Неверно введен пароль");
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogWarning(ex, "Warning in SomeAction");
+                return NotFound("Менеджера с такой почтой не существует");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in SomeAction.");
+                return StatusCode(500, "Неизвестная ошибка, уже исправляем");
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateSeller(Seller seller) 
         {

@@ -1,4 +1,5 @@
 ﻿using SalesScriptConstructor.Domain.Entities;
+using SalesScriptConstructor.Domain.Interfaces.IManagers;
 using SalesScriptConstructor.Domain.Interfaces.ISellers;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,12 @@ namespace SalesScriptConstructor.Domain.Services
         public async Task<Seller> GetSellerByIdAsync(Guid id)
         {
             return await _sellersRepository.GetSellerByIdAsync(id)?? throw new ArgumentNullException();
+        }
+
+        public async Task<Seller> GetSellerByMailAsync(string mail, string password)
+        {
+            if (_sellersRepository.GetSellerByMailAsync(mail).Result.HashedPassword != password) throw new ArgumentOutOfRangeException();
+            return await _sellersRepository.GetSellerByMailAsync(mail) ?? throw new ArgumentNullException();
         }
 
         public async Task<IEnumerable<Seller>> GetSellersByManagerId(Guid ManagerId)
