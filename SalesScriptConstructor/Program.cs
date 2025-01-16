@@ -38,11 +38,12 @@ builder.Services.AddDbContext<PostgreDbContext>(options =>
 // Настройки для CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:4200")
-                          .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                          .WithHeaders("Content-Type", "Authorization")
-                          .SetPreflightMaxAge(TimeSpan.FromSeconds(2520)));
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
@@ -60,7 +61,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
