@@ -3,32 +3,33 @@
         <h2 class="text-align">Регистрация</h2>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <input pInputText id="surname" autocomplete="off"/>
+                <input pInputText id="surname" autocomplete="off" [(ngModel)]="surname" (focus)="toNormal('surname')"/>
                 <label for="surname">Фамилия</label>
             </p-floatlabel>
         </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <input pInputText id="name" autocomplete="off"/>
+                <input pInputText id="name" autocomplete="off" [(ngModel)]="name" (focus)="toNormal('name')"/>
                 <label for="name">Имя</label>
             </p-floatlabel>
         </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <input pInputText id="patronymic" autocomplete="off"/>
+                <input pInputText id="patronymic" autocomplete="off" [(ngModel)]="patronymic" (focus)="toNormal('patronymic')"/>
                 <label for="patronymic">Отчество</label>
             </p-floatlabel>
         </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <input pInputText id="mail" autocomplete="off"/>
+                <input pInputText id="mail" autocomplete="off" [(ngModel)]="mail" (focus)="toNormal('mail')"/>
                 <label for="mail">Почта</label>
             </p-floatlabel>
         </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
                 <p-password  inputId="password" promptLabel="Введите пароль" weakLabel="Слишком простой" 
-                mediumLabel="Достаточно сильный" strongLabel="Очень сильный" autocomplete="off">
+                mediumLabel="Достаточно сильный" strongLabel="Очень сильный" autocomplete="off" [(ngModel)]="password"
+                (onFocus)="toNormal('password')">
                     <ng-template #footer>
                         <p-divider />
                         <ul class="pl-2 ml-2 my-0 leading-normal">
@@ -44,7 +45,8 @@
         </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
-                <p-password inputId="confpassword" autocomplete="off" [feedback]="false" />
+                <p-password id="confpassword" autocomplete="off" [feedback]="false" [(ngModel)]="confpassword" 
+                (onFocus)="toNormal('confpassword')"/>
                 <label for="confpassword">Подтверждение пароля</label>
             </p-floatlabel>
         </div>
