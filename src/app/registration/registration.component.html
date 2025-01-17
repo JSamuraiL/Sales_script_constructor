@@ -1,6 +1,9 @@
 <div style="height: 95vh;align-items: center;justify-content: center;display: flex;"> 
     <p-card [style]="{width: '25rem',  margin: '0 auto'}">
         <h2 class="text-align">Регистрация</h2>
+        <div *ngIf="loading" style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <p-progressSpinner styleClass="custom-spinner" [style]="{'width': '50px', 'height': '50px'}" [animationDuration]="'1200ms'"></p-progressSpinner>
+        </div>
         <div class="indent item-align">
             <p-floatlabel variant="on" >
                 <input pInputText id="surname" autocomplete="off" [(ngModel)]="surname" (focus)="toNormal('surname')"/>
@@ -17,6 +20,13 @@
             <p-floatlabel variant="on" >
                 <input pInputText id="patronymic" autocomplete="off" [(ngModel)]="patronymic" (focus)="toNormal('patronymic')"/>
                 <label for="patronymic">Отчество</label>
+            </p-floatlabel>
+        </div>
+        <div class="indent item-align ">
+            <p-floatlabel  variant="on" >
+                <p-select [(ngModel)]="role" inputId="role" [options]="roles" optionLabel="rolename" 
+                (onFocus)="toNormal('role')" [style]="{width: '220px'}"/>
+                <label for="role">Роль</label>
             </p-floatlabel>
         </div>
         <div class="indent item-align">

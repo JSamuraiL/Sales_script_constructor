@@ -1,26 +1,31 @@
-<div style="height: 95vh;align-items: center;justify-content: center;display: flex;"> 
-    <p-card [style]="{width: '25rem',  margin: '0 auto'}">
-        <h2 class="text-align">Вход</h2>
-        <div class="indent item-align">
-            <p-floatlabel variant="on" >
-                <input pInputText id="mail" autocomplete="off" [(ngModel)]="mail" (focus)="toNormal('mail')"/>
-                <label for="mail">Почта</label>
-            </p-floatlabel>
+<div style="height: 95vh; align-items: center; justify-content: center; display: flex;">  
+    <p-card [style]="{width: '25rem', margin: '0 auto'}"> 
+        <h2 class="text-align">Вход</h2> 
+
+        <div *ngIf="loading" style="display: flex; justify-content: center; margin-bottom: 20px;">
+            <p-progressSpinner styleClass="custom-spinner" [style]="{'width': '50px', 'height': '50px'}" [animationDuration]="'1200ms'"></p-progressSpinner>
         </div>
-        <div class="indent item-align">
-            <p-floatlabel variant="on" >
-                <p-password inputId="password" autocomplete="off" [feedback]="false" [(ngModel)]="password"
-                (onFocus)="toNormal('password')"/>
-                <label for="password">Пароль</label>
-            </p-floatlabel>
-        </div>
-        <ng-template #footer>  
-            <div>
-                <p-toast />
-                <p-button [style]="{width: '15rem'}" (onClick)="enter()" label="Войти" class="indent item-align" />
-                <p class="indent item-align">Нет учетной записи?</p>
-                <a routerLink="/registration" class="item-align" style="margin-top: -10px;">Зарегистрироваться</a>
-            </div>  
-        </ng-template> 
-    </p-card>
+        
+        <div class="indent item-align"> 
+            <p-floatlabel variant="on"> 
+                <input pInputText id="mail" autocomplete="off" [(ngModel)]="mail" (focus)="toNormal('mail')"/> 
+                <label for="mail">Почта</label> 
+            </p-floatlabel> 
+        </div> 
+        <div class="indent item-align"> 
+            <p-floatlabel variant="on"> 
+                <p-password inputId="password" autocomplete="off" [feedback]="false" [(ngModel)]="password" 
+                (onFocus)="toNormal('password')"/> 
+                <label for="password">Пароль</label> 
+            </p-floatlabel> 
+        </div> 
+        <ng-template #footer>   
+            <div> 
+                <p-toast></p-toast> 
+                <p-button [style]="{width: '15rem'}" (onClick)="enter()" label="Войти" class="indent item-align"></p-button> 
+                <p class="indent item-align">Нет учетной записи?</p> 
+                <a routerLink="/registration" class="item-align" style="margin-top: -10px;">Зарегистрироваться</a> 
+            </div>   
+        </ng-template>  
+    </p-card> 
 </div>
