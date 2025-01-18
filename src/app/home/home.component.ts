@@ -103,6 +103,16 @@ export class HomeComponent {
       }, 
       error: (error) => { 
           this.loading = false;
+          if (error.status == 404) {
+            console.error('Ошибка при входе: пользователь с такой почтой не найден');
+            this.messageService.add({ 
+              severity: 'error', 
+              summary: 'Ошибка', 
+              detail: 'Пользователь с такой почтой не найден', 
+              life: 3000 
+          }); 
+          }
+          else{
           // Обработка ошибки при запросе продавца
           console.error('Ошибка при входе:', error); 
           this.messageService.add({ 
@@ -111,6 +121,7 @@ export class HomeComponent {
               detail: error.error || 'Произошла ошибка', 
               life: 3000 
           }); 
+        }
       } 
   });
 }
