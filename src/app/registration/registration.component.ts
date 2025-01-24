@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { NgIf } from '@angular/common';
+import { path } from '../app.config';
 
 
 interface Role {
@@ -126,7 +127,7 @@ export class RegistrationComponent {
         hashedPassword: this.password,
         mail: this.mail
       }
-      this.http.post<any>(`https://localhost:7255/api/managers`, manager)
+      this.http.post<any>(`${path}/api/managers`, manager)
     .subscribe({ 
       next: (manager) => { 
         this.loading = false;
@@ -161,7 +162,7 @@ export class RegistrationComponent {
         hashedPassword: this.password,
         mail: this.mail
       }
-      this.http.post<any>(`https://localhost:7255/api/sellers`, seller)
+      this.http.post<any>(`${path}/api/sellers`, seller)
     .subscribe({ 
       next: (seller) => {
         this.loading = false; 

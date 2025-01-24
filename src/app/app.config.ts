@@ -21,5 +21,7 @@ export const appConfig: ApplicationConfig = {
           preset: Aura
       }
     })
-  ]
+  ] 
 };
+
+export const path: string = "https://localhost:7255"

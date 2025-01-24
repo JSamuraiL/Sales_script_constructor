@@ -16,6 +16,7 @@ import { HttpClient } from '@angular/common/http';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { NgIf } from '@angular/common';
+import { path } from '../app.config';
 
 
 @Injectable({
@@ -67,7 +68,7 @@ export class HomeComponent {
 
     this.loading = true;
 
-    this.http.get<any>(`https://localhost:7255/api/managers/byMail/${this.mail}?password=${this.password}`)
+    this.http.get<any>(`${path}/api/managers/byMail/${this.mail}?password=${this.password}`)
     .subscribe({
       next: (manager) => {
           this.loading = false;
@@ -88,7 +89,7 @@ export class HomeComponent {
   });
   }
   checkSeller() {
-    this.http.get<any>(`https://localhost:7255/api/sellers/byMail/${this.mail}?password=${this.password}`)
+    this.http.get<any>(`${path}/api/sellers/byMail/${this.mail}?password=${this.password}`)
     .subscribe({ 
       next: (seller) => {
           this.loading = false; 
